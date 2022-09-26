@@ -19,9 +19,9 @@ import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 
-const likedValueKey = ValueKey('Alarm');
-const ingredientsValueKey = ValueKey('Todo');
-const listsValueKey = ValueKey('Photo');
+const likedValueKey = ValueKey('Liked');
+const ingredientsValueKey = ValueKey('Ingredients');
+const listsValueKey = ValueKey('Lists');
 
 final Map<Key, MenuItemContent> menuItems = {
   likedValueKey: MenuItemContent(
@@ -35,14 +35,28 @@ final Map<Key, MenuItemContent> menuItems = {
           iconData: Icons.rule))
 };
 
+Map<int, Color> color = {
+  50:Color.fromRGBO(4,131,184, .1),
+  100:Color.fromRGBO(4,131,184, .2),
+  200:Color.fromRGBO(4,131,184, .3),
+  300:Color.fromRGBO(4,131,184, .4),
+  400:Color.fromRGBO(4,131,184, .5),
+  500:Color.fromRGBO(4,131,184, .6),
+  600:Color.fromRGBO(4,131,184, .7),
+  700:Color.fromRGBO(4,131,184, .8),
+  800:Color.fromRGBO(4,131,184, .9),
+  900:Color.fromRGBO(4,131,184, 1),
+};
+
 const title = 'Resquitem';
-const menuColor = Color(0xFF424242);
+MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
+MaterialColor sltColor = MaterialColor(0XFFFFFF, color);
 
 final theme = ThemeData(
-    brightness: Brightness.dark,
-    textTheme: const TextTheme(bodyText2: TextStyle(color: Color(0xFFFFFFFF))),
+    brightness: Brightness.light,
+    textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.black54)),
     primaryColor: Colors.white,
-    backgroundColor: Colors.black);
+    backgroundColor: menuColor);
 
 void main() {
   runApp(const MyApp());
@@ -70,7 +84,6 @@ class _MyAppState extends State<MyApp> {
                   leading: Builder(
                     builder: (iconButtonBuilderContext) => IconButton(
                       icon: const Icon(Icons.menu),
-                      // TODO abrir telinha pra pesquisa dos filtros
                       onPressed: () {
                         state.toggle(iconButtonBuilderContext);
                         setState(() {});
@@ -86,10 +99,14 @@ class _MyAppState extends State<MyApp> {
                 body: Builder(
                     builder: (c) => Center(
                         child: state.selectedMenuKey == null
-                            ? const Text('Not selected')
-                            : Icon(menuItems[state.selectedMenuKey]!
-                            .menuItem!
-                            .iconData))),
+                            ? ShowNull()
+                            : state.selectedMenuKey == likedValueKey
+                            ? ShowLiked()
+                            : state.selectedMenuKey == ingredientsValueKey
+                            ? ShowIngredients()
+                            : state.selectedMenuKey == listsValueKey
+                            ? ShowList()
+                            : const Text('Not selected'))),
                 menuBackgroundColor: menuColor,
                 menuBuilder: Builder(builder: getMenu),
                 menuMode: state.menuMode(context),
@@ -130,4 +147,34 @@ class _MyAppState extends State<MyApp> {
                             : Theme.of(buildContentContext).textTheme.bodyText2)
                 ]))
       ]);
+
+
+}
+class ShowNull extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text("Arroz"));
+  }
+}
+
+
+class ShowLiked extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text("Liked"));
+  }
+}
+class ShowIngredients extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Text("Ingredients")
+    );
+  }
+}
+class ShowList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text("List"));
+  }
 }
