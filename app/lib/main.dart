@@ -14,167 +14,121 @@ class MyApp extends StatelessWidget {
 }*/
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'Menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
+import 'package:easy_splash_screen/easy_splash_screen.dart';
+//import '../home.dart';
+import 'package:flutter/material.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 
-const likedValueKey = ValueKey('Liked');
-const ingredientsValueKey = ValueKey('Ingredients');
-const listsValueKey = ValueKey('Lists');
-
-final Map<Key, MenuItemContent> menuItems = {
-  likedValueKey: MenuItemContent(
-      menuItem: MenuItemDefinition("Liked", likedValueKey,
-          iconData: Icons.favorite)),
-  ingredientsValueKey: MenuItemContent(
-      menuItem: MenuItemDefinition("Ingredients", ingredientsValueKey,
-          iconData: Icons.shopping_basket)),
-  listsValueKey: MenuItemContent(
-      menuItem: MenuItemDefinition("Lists", listsValueKey,
-          iconData: Icons.rule))
-};
-
-Map<int, Color> color = {
-  50:Color.fromRGBO(4,131,184, .1),
-  100:Color.fromRGBO(4,131,184, .2),
-  200:Color.fromRGBO(4,131,184, .3),
-  300:Color.fromRGBO(4,131,184, .4),
-  400:Color.fromRGBO(4,131,184, .5),
-  500:Color.fromRGBO(4,131,184, .6),
-  600:Color.fromRGBO(4,131,184, .7),
-  700:Color.fromRGBO(4,131,184, .8),
-  800:Color.fromRGBO(4,131,184, .9),
-  900:Color.fromRGBO(4,131,184, 1),
-};
-
-const title = 'Resquitem';
-MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
-MaterialColor sltColor = MaterialColor(0XFFFFFF, color);
-
-final theme = ThemeData(
-    brightness: Brightness.light,
-    textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.black54)),
-    primaryColor: Colors.white,
-    backgroundColor: menuColor);
-
-void main() {
-  runApp(const MyApp());
+void main(){
+  runApp(MaterialApp(
+    initialRoute: "/",
+    routes: {
+      "/segunda": (context) => MyApp(),
+    },
+    //home:MyApp(),
+    home:porra(),
+  ));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class SplashPage extends StatefulWidget {
+  SplashPage({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  _SplashPageState createState() => _SplashPageState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final NavigationDrawerState state = NavigationDrawerState();
-
-  @override
-  Widget build(BuildContext materialAppContext) => MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: title,
-      theme: theme,
-      home: Builder(
-          builder: (context) => Scaffold(
-              appBar: AppBar(
-                  title: const Text(title),
-                  leading: Builder(
-                    builder: (iconButtonBuilderContext) => IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        state.toggle(iconButtonBuilderContext);
-                        setState(() {});
-                      },
-                      tooltip: 'Menu',
-                    ),
-                  )),
-              drawer: NavigationDrawer(
-                menuBuilder: Builder(builder: getMenu),
-                menuMode: state.menuMode(context),
-              ),
-              body: NavigationDrawerMenuFrame(
-                body: Builder(
-                    builder: (c) => Center(
-                        child: state.selectedMenuKey == null
-                            ? ShowNull()
-                            : state.selectedMenuKey == likedValueKey
-                            ? ShowLiked()
-                            : state.selectedMenuKey == ingredientsValueKey
-                            ? ShowIngredients()
-                            : state.selectedMenuKey == listsValueKey
-                            ? ShowList()
-                            : const Text('Not selected'))),
-                menuBackgroundColor: menuColor,
-                menuBuilder: Builder(builder: getMenu),
-                menuMode: state.menuMode(context),
-              ))));
-
-  Widget getMenu(BuildContext context) =>
-      Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        NavigationDrawerMenu(
-            highlightColor: Theme.of(context).indicatorColor,
-            onSelectionChanged: (c, key) {
-              state.selectedMenuKey = key;
-              state.closeDrawer(c);
-              setState(() {});
-            },
-            menuItems: menuItems.values.toList(),
-            selectedMenuKey: state.selectedMenuKey,
-            itemPadding: const EdgeInsets.only(left: 5, right: 5),
-            buildMenuButtonContent: (menuItemDefinition, isSelected,
-                buildContentContext) =>
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(menuItemDefinition.iconData,
-                      color: isSelected
-                          ? Theme.of(buildContentContext).backgroundColor
-                          : Theme.of(buildContentContext)
-                          .textTheme
-                          .bodyText2!
-                          .color),
-                  if (state.menuMode(context) != MenuMode.Thin)
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  if (state.menuMode(context) != MenuMode.Thin)
-                    Text(menuItemDefinition.text,
-                        style: isSelected
-                            ? Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: Theme.of(buildContentContext)
-                                .backgroundColor)
-                            : Theme.of(buildContentContext).textTheme.bodyText2)
-                ]))
-      ]);
-
-
-}
-class ShowNull extends StatelessWidget {
+class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("Arroz"));
-  }
-}
-
-
-class ShowLiked extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(child: Text("Liked"));
-  }
-}
-class ShowIngredients extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: Text("Ingredients")
+    return EasySplashScreen(
+      /*logo: Image.network(
+          'https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/flutter-512.png'),*/
+      logo: Image.asset("assets/images/comida3.jpg"),
+      title: const Text(
+        "Resquitem",
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      backgroundColor: Colors.grey.shade400,
+      showLoader: true,
+      loadingText: const Text("Loading..."),
+      navigator: const MyApp(),
+      durationInSeconds: 5,
     );
   }
+  /*Widget build(BuildContext context) {
+
+    return AnimatedSplashScreen(
+          splash: 'assets/images/comida3.jpg',
+          splashIconSize: (MediaQuery.of(context).size.height),
+          nextScreen: const MyApp(),
+          //splashTransition: SplashTransition.rotationTransition,
+          //pageTransitionType: PageTransitionType.scale,
+    );
+  }*/
+
+
+
+
 }
-class ShowList extends StatelessWidget {
+
+class teste extends StatelessWidget {
+  const teste ({super.key});
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      body: Container(
+        child: SizedBox.expand(
+
+        )
+      ),
+    );
+  }
+
+}
+
+
+
+class porra extends StatelessWidget {
+  const porra({super.key});
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("List"));
+
+    return Scaffold(
+        color:Colors.white,
+        //duration: const Duration(seconds: 5),
+        body: Container(
+          child: SizedBox.expand(
+            child: Image.asset("assets/images/comida3.jpg", fit: BoxFit.cover),
+
+
+          ),
+          child: (
+            children: <Widget>[
+              ElevatedButton(
+                child: Text("Entrar"),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/segunda");
+                }
+              ),
+            ],
+          )
+          //onEnd: _foo(),
+        ),
+    );
   }
+
+  /*_foo(){
+    const MyApp();
+  }*/
+
 }
