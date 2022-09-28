@@ -32,7 +32,7 @@ void main(){
       "/segunda": (context) => MyApp(),
     },
     //home:MyApp(),
-    home:porra(),
+    home: teste(),
   ));
 }
 
@@ -64,71 +64,80 @@ class _SplashPageState extends State<SplashPage> {
       durationInSeconds: 5,
     );
   }
-  /*Widget build(BuildContext context) {
-
-    return AnimatedSplashScreen(
-          splash: 'assets/images/comida3.jpg',
-          splashIconSize: (MediaQuery.of(context).size.height),
-          nextScreen: const MyApp(),
-          //splashTransition: SplashTransition.rotationTransition,
-          //pageTransitionType: PageTransitionType.scale,
-    );
-  }*/
-
 
 
 
 }
 
 class teste extends StatelessWidget {
-  const teste ({super.key});
+  const teste({super.key});
 
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      body: Container(
-        child: SizedBox.expand(
-
-        )
-      ),
-    );
-  }
-
-}
-
-
-
-class porra extends StatelessWidget {
-  const porra({super.key});
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        color:Colors.white,
-        //duration: const Duration(seconds: 5),
-        body: Container(
-          child: SizedBox.expand(
-            child: Image.asset("assets/images/comida3.jpg", fit: BoxFit.cover),
-
-
-          ),
-          child: (
-            children: <Widget>[
-              ElevatedButton(
-                child: Text("Entrar"),
-                onPressed: () {
-                  Navigator.pushNamed(context, "/segunda");
-                }
+      body: Stack(
+        children: <Widget> [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: new AssetImage("assets/images/comida3.jpg"),
+                  fit: BoxFit.cover,
               ),
-            ],
+            ),
+          ),
+          Center(
+            child: ElevatedButton (
+                child: Text('Entrar'),
+                onPressed: () => {
+                  Navigator.pushNamed(context, "/segunda")
+                }
+            ),
           )
-          //onEnd: _foo(),
-        ),
+        ],
+      )
     );
-  }
 
-  /*_foo(){
-    const MyApp();
-  }*/
+
+    /*
+    return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => {
+            Navigator.pushNamed(context, "/segunda")
+          },
+          child: Image.asset("assets/images/comida3.jpg", fit: BoxFit.cover),
+        )
+    );
+    */
+
+    /*return Scaffold(
+    body: Container(
+
+
+
+        child: Row(
+          children: <Widget> [
+            Expanded(
+              child: SizedBox(
+                child: Image.asset("assets/images/comida3.jpg", fit: BoxFit.cover),
+              ),
+
+            ),
+            ElevatedButton (
+                child: Text('Foo'),
+                onPressed: () => {
+                  Navigator.pushNamed(context, "/segunda")
+                }
+            ),
+          ],
+
+        ),
+
+
+      ),
+    );
+
+     */
+  }
 
 }

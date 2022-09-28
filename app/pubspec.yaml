@@ -35,7 +35,6 @@ dependencies:
   navigation_drawer_menu:
     ^1.0.0-beta
   easy_splash_screen:
-
   animated_splash_screen: ^1.3.0
   page_transition: ^2.0.9
 
