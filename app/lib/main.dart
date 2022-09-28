@@ -21,6 +21,7 @@ import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:easy_splash_screen/easy_splash_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 //import '../home.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -85,13 +86,55 @@ class teste extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: ElevatedButton (
-                child: Text('Entrar'),
-                onPressed: () => {
-                  Navigator.pushNamed(context, "/segunda")
-                }
-            ),
+          Container(
+            //height: double.infinity,
+            width: double.infinity,
+            margin: EdgeInsets.only(top: 100),
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget> [
+                Text(
+                  "Resquitem",
+                  style:  GoogleFonts.comfortaa(
+                    textStyle: TextStyle(letterSpacing: .5, fontSize: 50, fontWeight: FontWeight.bold,),
+                  ),
+                ),
+                Text(
+                  ""
+                ),
+                Text(
+                  "Recipes with food from your fridge",
+                  textAlign: TextAlign.center,
+                  style:  GoogleFonts.comfortaa(
+                    textStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            )
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(16),
+              child: Column (
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget> [
+                  ElevatedButton(
+                    child: Text(
+                      'Entrar',
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    onPressed: () => {
+                      Navigator.pushNamed(context, "/segunda"),
+                    },
+                    style: ButtonStyle(
+                      minimumSize: MaterialStateProperty.all(Size(150,60))
+                    ),
+                  )
+                ],
+              ),
           )
         ],
       )

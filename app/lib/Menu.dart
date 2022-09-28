@@ -3,6 +3,8 @@ import 'package:navigation_drawer_menu/navigation_drawer.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
+import 'package:image_card/image_card.dart';
+
 
 const likedValueKey = ValueKey('Liked');
 const searchValueKey = ValueKey('Search');
@@ -37,11 +39,12 @@ const title = 'Resquitem';
 MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
 MaterialColor sltColor = MaterialColor(0XFFFFFF, color);
 
-final theme = ThemeData(
+final themeMenu = ThemeData(
     brightness: Brightness.light,
-    textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.black54)),
-    primaryColor: Colors.white,
-    backgroundColor: menuColor);
+    textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.white)),
+    primaryColor: Color.fromARGB(250, 0, 0, 0),
+    backgroundColor: Color.fromARGB(250, 0, 0, 0),
+);
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -57,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext materialAppContext) => MaterialApp(
       debugShowCheckedModeBanner: false,
       title: title,
-      theme: theme,
+      theme: themeMenu,
       home: Builder(
           builder: (context) => Scaffold(
               appBar: AppBar(
@@ -75,6 +78,7 @@ class _MyAppState extends State<MyApp> {
               drawer: NavigationDrawer(
                 menuBuilder: Builder(builder: getMenu),
                 menuMode: state.menuMode(context),
+
               ),
               body: NavigationDrawerMenuFrame(
                 body: Builder(
@@ -94,7 +98,9 @@ class _MyAppState extends State<MyApp> {
               ))));
 
   Widget getMenu(BuildContext context) =>
-      Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
         NavigationDrawerMenu(
             highlightColor: Theme.of(context).indicatorColor,
             onSelectionChanged: (c, key) {
@@ -126,16 +132,119 @@ class _MyAppState extends State<MyApp> {
                             color: Theme.of(buildContentContext)
                                 .backgroundColor)
                             : Theme.of(buildContentContext).textTheme.bodyText2)
-                ]))
-      ]);
+                ])),
+        ]);
 
 
 }
 class ShowNull extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text(""));
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        child: Column (
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 10),
+            SingleChildScrollView (
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  FillImageCard(
+                    width: 300,
+                    heightImage: 140,
+                    imageProvider: AssetImage('assets/images/comida3.jpg'),
+                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
+                    title: _title(),
+                    description: _content(),
+                  ),
+                  const SizedBox(width: 20),
+                  FillImageCard(
+                    width: 300,
+                    heightImage: 140,
+                    imageProvider: AssetImage('assets/images/comida3.jpg'),
+                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
+                    title: _title(),
+                    description: _content(),
+                  ),
+                  const SizedBox(width: 12),
+                  FillImageCard(
+                    width: 300,
+                    heightImage: 140,
+                    imageProvider: AssetImage('assets/images/comida3.jpg'),
+                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
+                    title: _title(),
+                    description: _content(),
+                  ),
+                  const SizedBox(width: 12),
+                  FillImageCard(
+                    width: 300,
+                    heightImage: 140,
+                    imageProvider: AssetImage('assets/images/comida3.jpg'),
+                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
+                    title: _title(),
+                    description: _content(),
+                  ),
+                  const SizedBox(width: 12),
+                  FillImageCard(
+                    width: 300,
+                    heightImage: 140,
+                    imageProvider: AssetImage('assets/images/comida3.jpg'),
+                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
+                    title: _title(),
+                    description: _content(),
+                  ),
+                  const SizedBox(width: 12),
+                  FillImageCard(
+                    width: 300,
+                    heightImage: 140,
+                    imageProvider: AssetImage('assets/images/comida3.jpg'),
+                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
+                    title: _title(),
+                    description: _content(),
+                  ),
+
+                ]
+              )
+            ),
+          ]
+        )
+      ),
+    );
   }
+}
+
+
+
+Widget _title({Color? color}) {
+  return Text(
+    'Arroz',
+    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
+  );
+}
+
+Widget _content({Color? color}) {
+  return Text(
+    'Arroz bão',
+    style: TextStyle(color: Colors.black),
+  );
+}
+
+Widget _tag(String tag, VoidCallback onPressed) {
+  return InkWell(
+    onTap: onPressed,
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6), color: Colors.green),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Text(
+        tag,
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  );
 }
 
 
@@ -150,7 +259,13 @@ class ShowSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
 
-        child: Text(""),
+        child: Row(
+          children: <Widget>[
+            Text("Receita1"),
+            Text("Receita2"),
+            Text("Receita3"),
+          ]
+        ),
     );
   }
 }
