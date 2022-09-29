@@ -4,7 +4,9 @@ import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:image_card/image_card.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'ResultadoPesquisa.dart';
+import 'Receita.dart';
 
 const likedValueKey = ValueKey('Liked');
 const searchValueKey = ValueKey('Search');
@@ -134,9 +136,8 @@ class _MyAppState extends State<MyApp> {
                             : Theme.of(buildContentContext).textTheme.bodyText2)
                 ])),
         ]);
-
-
 }
+
 class ShowNull extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -156,8 +157,8 @@ class ShowNull extends StatelessWidget {
                     width: 300,
                     heightImage: 140,
                     imageProvider: AssetImage('assets/images/comida3.jpg'),
-                    tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                    title: _title(),
+                    tags: [_tag('arroz', () {}), _tag('Good food', () {})],
+                    title: _title(context),
                     description: _content(),
                   ),
                   const SizedBox(width: 20),
@@ -166,7 +167,7 @@ class ShowNull extends StatelessWidget {
                     heightImage: 140,
                     imageProvider: AssetImage('assets/images/comida3.jpg'),
                     tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                    title: _title(),
+                    title: _title(context),
                     description: _content(),
                   ),
                   const SizedBox(width: 12),
@@ -175,7 +176,7 @@ class ShowNull extends StatelessWidget {
                     heightImage: 140,
                     imageProvider: AssetImage('assets/images/comida3.jpg'),
                     tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                    title: _title(),
+                    title: _title(context),
                     description: _content(),
                   ),
                   const SizedBox(width: 12),
@@ -184,7 +185,7 @@ class ShowNull extends StatelessWidget {
                     heightImage: 140,
                     imageProvider: AssetImage('assets/images/comida3.jpg'),
                     tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                    title: _title(),
+                    title: _title(context),
                     description: _content(),
                   ),
                   const SizedBox(width: 12),
@@ -193,8 +194,9 @@ class ShowNull extends StatelessWidget {
                     heightImage: 140,
                     imageProvider: AssetImage('assets/images/comida3.jpg'),
                     tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                    title: _title(),
+                    title: _title(context),
                     description: _content(),
+
                   ),
                   const SizedBox(width: 12),
                   FillImageCard(
@@ -202,7 +204,7 @@ class ShowNull extends StatelessWidget {
                     heightImage: 140,
                     imageProvider: AssetImage('assets/images/comida3.jpg'),
                     tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                    title: _title(),
+                    title: _title(context),
                     description: _content(),
                   ),
 
@@ -216,18 +218,28 @@ class ShowNull extends StatelessWidget {
   }
 }
 
-
-
-Widget _title({Color? color}) {
-  return Text(
-    'Arroz',
-    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
+Widget _title(BuildContext context) {
+  return InkWell(
+    child: Text(
+      'Arroz',
+      style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+      ),
+    ),
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Receita(id: 350))
+      );
+    },
   );
 }
 
 Widget _content({Color? color}) {
   return Text(
-    'Arroz bão',
+    '',
     style: TextStyle(color: Colors.black),
   );
 }
@@ -248,6 +260,84 @@ Widget _tag(String tag, VoidCallback onPressed) {
 }
 
 
+class EntradaCheckBox extends StatefulWidget {
+  _EntradaCheckBoxState st = new _EntradaCheckBoxState();
+  @override
+  _EntradaCheckBoxState createState() {
+    return st;
+  }
+}
+
+bool? salgado = false;
+bool? doce = false;
+bool? cafeDaManha = false;
+bool? almoco = false;
+bool? jantar = false;
+
+class _EntradaCheckBoxState extends State<EntradaCheckBox> {
+
+  @override
+  Widget build(BuildContext context) {
+      return Container (
+        padding: const EdgeInsets.only(left: 17),
+            child: Column(
+
+                  children: <Widget> [
+                    CheckboxListTile(
+                        title: Text("Savory"),
+                        value: salgado,
+                        onChanged: (bool? valor) {
+                          setState(() {
+                            salgado = valor;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                        title: Text("Sweet"),
+                        value: doce,
+                        onChanged: (bool? valor){
+                          setState(() {
+                            doce = valor ;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                        title: Text("Breakfast"),
+                        value: cafeDaManha,
+                        onChanged: (bool? valor){
+                          setState(() {
+                            cafeDaManha = valor ;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                        title: Text("Lunch"),
+                        value: almoco,
+                        onChanged: (bool? valor){
+                          setState(() {
+                            almoco = valor ;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                      title: Text("Dinner"),
+                      value: jantar,
+                      onChanged: (bool? valor){
+                        setState(() {
+                          jantar = valor ;
+                        });
+                      },
+                    ),
+                  ],
+
+            ),
+    );
+
+  }
+}
+
+
+
 class ShowLiked extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -255,23 +345,197 @@ class ShowLiked extends StatelessWidget {
   }
 }
 class ShowSearch extends StatelessWidget {
+  TextEditingController _textEditingController = TextEditingController(); //instanciar o objeto para controlar o campo de texto
+  String foo = "banana";
+  EntradaCheckBox entrada = new EntradaCheckBox();
+
   @override
   Widget build(BuildContext context) {
     return Container(
+        padding: const EdgeInsets.only(top: 30),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 32),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                      Text("Search recipes",
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.comfortaa(
+                        textStyle: TextStyle(
+                            letterSpacing: .5,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(250, 8, 110, 167),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-        child: Row(
-          children: <Widget>[
-            Text("Receita1"),
-            Text("Receita2"),
-            Text("Receita3"),
-          ]
+              Container(
+                margin: EdgeInsets.only(left: 32, top: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                      Text("Filter:",
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle (
+                          letterSpacing: .5,
+                          fontSize: 25,
+                          color: Color.fromARGB(250, 0, 0, 0)
+                        )
+                      )
+                    )
+                  ]
+                )
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 32),
+                child: TextField(
+                  controller: _textEditingController, //controlador do nosso campo de texto
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                      hintText: "Search by recipe name: "
+                  ),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  onSubmitted: null,
+                ),
+              ),
+
+              Container(
+
+                  child: Column(
+                    children: [
+                      Container(
+                          child: Column(
+                            children: [
+                              entrada,
+                            ],
+                          )
+                      ),
+
+
+                    ],
+                  ),
+                ),
+                Container (
+                  padding: EdgeInsets.only(right: 25, top: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton (
+                        child: Text("Filter",
+                          style: GoogleFonts.roboto(
+                              textStyle: TextStyle (
+                                  letterSpacing: .5,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(250, 250, 250, 250)
+                              )
+                          )
+                        ),
+                        style: ButtonStyle (
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                          minimumSize: MaterialStateProperty.all(Size(70,40))
+                        ),
+                        onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ResultadosBusca(valor: _textEditingController.text, salgado: salgado, doce: doce, cafeDaManha: cafeDaManha, almoco: almoco, jantar: jantar)),
+                          ),
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
     );
   }
 }
+
+
+
 class ShowList extends StatelessWidget {
+  TextEditingController _textEditingController = TextEditingController(); //instanciar o objeto para controlar o campo de texto
+
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("List"));
+    return Container(
+        width: double.infinity,
+        //child: SingleChildScrollView(
+          child: Column (
+              mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 32, top: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("Search recipes",
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.comfortaa(
+                        textStyle: TextStyle(
+                          letterSpacing: .5,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(250, 8, 110, 167),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                  margin: EdgeInsets.only(left: 32, top: 30),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Ingredientes:",
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.roboto(
+                                textStyle: TextStyle (
+                                    letterSpacing: .5,
+                                    fontSize: 25,
+                                    color: Color.fromARGB(250, 0, 0, 0)
+                                )
+                            )
+                        )
+                      ]
+                  )
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 32),
+                child: TextField(
+                  controller: _textEditingController, //controlador do nosso campo de texto
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                      hintText: "Enter the ingredient name: "
+                  ),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  onSubmitted: null,
+                ),
+              ),
+            ]
+          )
+       // )
+    );
   }
 }

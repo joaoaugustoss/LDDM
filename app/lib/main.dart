@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'Menu.dart';
+import 'ResultadoPesquisa.dart';
 import 'package:navigation_drawer_menu/navigation_drawer.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
@@ -32,42 +33,8 @@ void main(){
     routes: {
       "/segunda": (context) => MyApp(),
     },
-    //home:MyApp(),
     home: teste(),
   ));
-}
-
-class SplashPage extends StatefulWidget {
-  SplashPage({Key? key}) : super(key: key);
-
-  @override
-  _SplashPageState createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
-  @override
-  Widget build(BuildContext context) {
-    return EasySplashScreen(
-      /*logo: Image.network(
-          'https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/flutter-512.png'),*/
-      logo: Image.asset("assets/images/comida3.jpg"),
-      title: const Text(
-        "Resquitem",
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      backgroundColor: Colors.grey.shade400,
-      showLoader: true,
-      loadingText: const Text("Loading..."),
-      navigator: const MyApp(),
-      durationInSeconds: 5,
-    );
-  }
-
-
-
 }
 
 class teste extends StatelessWidget {
@@ -123,7 +90,7 @@ class teste extends StatelessWidget {
                 children: <Widget> [
                   ElevatedButton(
                     child: Text(
-                      'Entrar',
+                      'Enter',
                       style: TextStyle(fontSize: 25),
                     ),
                     onPressed: () => {
