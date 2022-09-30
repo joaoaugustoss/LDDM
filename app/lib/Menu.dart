@@ -273,6 +273,7 @@ bool? doce = false;
 bool? cafeDaManha = false;
 bool? almoco = false;
 bool? jantar = false;
+List<String> ingredientes = <String>[];
 
 class _EntradaCheckBoxState extends State<EntradaCheckBox> {
 
@@ -518,7 +519,7 @@ class ShowList extends StatelessWidget {
               ),
 
               Padding(
-                padding: EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 32),
+                padding: EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 10),
                 child: TextField(
                   controller: _textEditingController, //controlador do nosso campo de texto
                   textInputAction: TextInputAction.next,
@@ -533,6 +534,41 @@ class ShowList extends StatelessWidget {
                   onSubmitted: null,
                 ),
               ),
+
+              Container (
+                margin: EdgeInsets.only(right: 32),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            icon: Icon(Icons.add_circle, size: 40, color: Colors.blue),
+                            onPressed:(){
+                              if (_textEditingController.text != "") {
+                                ingredientes.add(_textEditingController.text);
+                              }
+                              print(ingredientes);
+                            }
+                        ),
+                      ]
+                  )
+              ),
+
+              /*
+              Container (
+                  margin: EdgeInsets.only(right: 32),
+                  child: Row(
+                    children: [
+                      ListView.builder(
+                      itemCount: ingredientes.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(ingredientes[index]),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),*/
             ]
           )
        // )
