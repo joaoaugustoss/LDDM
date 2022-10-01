@@ -7,6 +7,7 @@ import 'package:image_card/image_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'ResultadoPesquisa.dart';
 import 'Receita.dart';
+import 'objetoReceita.dart';
 
 const likedValueKey = ValueKey('Liked');
 const searchValueKey = ValueKey('Search');
@@ -15,13 +16,13 @@ const listsValueKey = ValueKey('Lists');
 final Map<Key, MenuItemContent> menuItems = {
   likedValueKey: MenuItemContent(
       menuItem:
-      MenuItemDefinition("Liked", likedValueKey, iconData: Icons.favorite)),
+          MenuItemDefinition("Liked", likedValueKey, iconData: Icons.favorite)),
   searchValueKey: MenuItemContent(
       menuItem: MenuItemDefinition("Search", searchValueKey,
           iconData: Icons.shopping_basket)),
   listsValueKey: MenuItemContent(
       menuItem:
-      MenuItemDefinition("Lists", listsValueKey, iconData: Icons.rule))
+          MenuItemDefinition("Lists", listsValueKey, iconData: Icons.rule))
 };
 
 Map<int, Color> color = {
@@ -59,56 +60,49 @@ class _MyAppState extends State<MyApp> {
   final NavigationDrawerState state = NavigationDrawerState();
 
   @override
-  Widget build(BuildContext materialAppContext) =>
-      MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: title,
-          theme: themeMenu,
-          home: Builder(
-              builder: (context) =>
-                  Scaffold(
-                      appBar: AppBar(
-                          title: const Text(title),
-                          leading: Builder(
-                            builder: (iconButtonBuilderContext) =>
-                                IconButton(
-                                  icon: const Icon(Icons.menu),
-                                  onPressed: () {
-                                    state.toggle(iconButtonBuilderContext);
-                                    setState(() {});
-                                  },
-                                  tooltip: 'Menu',
-                                ),
-                          )),
-                      drawer: NavigationDrawer(
-                        menuBuilder: Builder(builder: getMenu),
-                        menuMode: state.menuMode(context),
-                      ),
-                      body: NavigationDrawerMenuFrame(
-                        body: Builder(
-                            builder: (c) =>
-                                Center(
-                                    child: state.selectedMenuKey == null
-                                        ? ShowNull()
-                                        : state.selectedMenuKey == likedValueKey
-                                        ? ShowLiked()
-                                        : state.selectedMenuKey ==
-                                        searchValueKey
-                                        ? showSearch()
-                                        : state.selectedMenuKey == listsValueKey
+  Widget build(BuildContext materialAppContext) => MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: title,
+      theme: themeMenu,
+      home: Builder(
+          builder: (context) => Scaffold(
+              appBar: AppBar(
+                  title: const Text(title),
+                  leading: Builder(
+                    builder: (iconButtonBuilderContext) => IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        state.toggle(iconButtonBuilderContext);
+                        setState(() {});
+                      },
+                      tooltip: 'Menu',
+                    ),
+                  )),
+              drawer: NavigationDrawer(
+                menuBuilder: Builder(builder: getMenu),
+                menuMode: state.menuMode(context),
+              ),
+              body: NavigationDrawerMenuFrame(
+                body: Builder(
+                    builder: (c) => Center(
+                        child: state.selectedMenuKey == null
+                            ? ShowNull()
+                            : state.selectedMenuKey == likedValueKey
+                                ? ShowLiked()
+                                : state.selectedMenuKey == searchValueKey
+                                    ? showSearch()
+                                    : state.selectedMenuKey == listsValueKey
                                         ? ShowList()
                                         : const Text('Not selected'))),
-                        menuBackgroundColor: menuColor,
-                        menuBuilder: Builder(builder: getMenu),
-                        menuMode: state.menuMode(context),
-                      ))));
+                menuBackgroundColor: menuColor,
+                menuBuilder: Builder(builder: getMenu),
+                menuMode: state.menuMode(context),
+              ))));
 
   Widget getMenu(BuildContext context) =>
       Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         NavigationDrawerMenu(
-            highlightColor: Theme
-                .of(context)
-                .indicatorColor,
+            highlightColor: Theme.of(context).indicatorColor,
             onSelectionChanged: (c, key) {
               state.selectedMenuKey = key;
               state.closeDrawer(c);
@@ -118,18 +112,15 @@ class _MyAppState extends State<MyApp> {
             selectedMenuKey: state.selectedMenuKey,
             itemPadding: const EdgeInsets.only(left: 5, right: 5),
             buildMenuButtonContent: (menuItemDefinition, isSelected,
-                buildContentContext) =>
+                    buildContentContext) =>
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Icon(menuItemDefinition.iconData,
                       color: isSelected
-                          ? Theme
-                          .of(buildContentContext)
-                          .backgroundColor
-                          : Theme
-                          .of(buildContentContext)
-                          .textTheme
-                          .bodyText2!
-                          .color),
+                          ? Theme.of(buildContentContext).backgroundColor
+                          : Theme.of(buildContentContext)
+                              .textTheme
+                              .bodyText2!
+                              .color),
                   if (state.menuMode(context) != MenuMode.Thin)
                     const SizedBox(
                       width: 10,
@@ -137,99 +128,64 @@ class _MyAppState extends State<MyApp> {
                   if (state.menuMode(context) != MenuMode.Thin)
                     Text(menuItemDefinition.text,
                         style: isSelected
-                            ? Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(
-                            color: Theme
-                                .of(buildContentContext)
-                                .backgroundColor)
-                            : Theme
-                            .of(buildContentContext)
-                            .textTheme
-                            .bodyText2)
+                            ? Theme.of(context).textTheme.bodyText2!.copyWith(
+                                color: Theme.of(buildContentContext)
+                                    .backgroundColor)
+                            : Theme.of(buildContentContext).textTheme.bodyText2)
                 ])),
       ]);
 }
 
 class ShowNull extends StatelessWidget {
+  List<Receitas> receitas = [
+    Receitas (1, "Rice", "Good rice", "assets/images/comida2.jpg", 5, 120, [], []),
+    Receitas (2, "Bean", "Good bean", "assets/images/comida2.jpg", 5, 120, [], []),
+    Receitas (3, "Potato", "Good potato", "assets/images/comida2.jpg", 5, 120, [], []),
+    Receitas (4, "Orange", "Good orange", "assets/images/comida3.jpg", 5, 120, [], []),
+    Receitas (5, "Lemon", "Good lemon", "assets/images/comida3.jpg", 5, 120, [], []),
+    Receitas (6, "Chicken", "Good chicken", "assets/images/comida3.jpg", 5, 120, [], [])
+  ];
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      child: Column (
+        children: [
+          Expanded(
+            child: Column(
               children: [
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(children: [
-                      FillImageCard(
-                        width: 300,
-                        heightImage: 140,
-                        imageProvider: AssetImage('assets/images/comida3.jpg'),
-                        tags: [_tag('arroz', () {}), _tag('Good food', () {})],
-                        title: _title(context),
-                        description: _content(),
-                      ),
-                      const SizedBox(width: 20),
-                      FillImageCard(
-                        width: 300,
-                        heightImage: 140,
-                        imageProvider: AssetImage('assets/images/comida3.jpg'),
-                        tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                        title: _title(context),
-                        description: _content(),
-                      ),
-                      const SizedBox(width: 12),
-                      FillImageCard(
-                        width: 300,
-                        heightImage: 140,
-                        imageProvider: AssetImage('assets/images/comida3.jpg'),
-                        tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                        title: _title(context),
-                        description: _content(),
-                      ),
-                      const SizedBox(width: 12),
-                      FillImageCard(
-                        width: 300,
-                        heightImage: 140,
-                        imageProvider: AssetImage('assets/images/comida3.jpg'),
-                        tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                        title: _title(context),
-                        description: _content(),
-                      ),
-                      const SizedBox(width: 12),
-                      FillImageCard(
-                        width: 300,
-                        heightImage: 140,
-                        imageProvider: AssetImage('assets/images/comida3.jpg'),
-                        tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                        title: _title(context),
-                        description: _content(),
-                      ),
-                      const SizedBox(width: 12),
-                      FillImageCard(
-                        width: 300,
-                        heightImage: 140,
-                        imageProvider: AssetImage('assets/images/comida3.jpg'),
-                        tags: [_tag('Arroz', () {}), _tag('Comida bão', () {})],
-                        title: _title(context),
-                        description: _content(),
-                      ),
-                    ])),
-              ])),
+                Flexible(
+                  child: ListView.builder(
+                    itemCount: receitas.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          FillImageCard(
+                            width: 300,
+                            heightImage: 140,
+                            imageProvider: AssetImage(receitas[index].linkImagem),
+                            tags: [_tag(receitas[index].titulo, () {}), _tag(receitas[index].descricao, () {})],
+                            title: _title(context, receitas[index]),
+                            description: _content(),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-Widget _title(BuildContext context) {
+Widget _title(BuildContext context, Receitas receita) {
   return InkWell(
     child: Text(
-      'Arroz',
+      receita.titulo,
       style: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,
@@ -238,7 +194,7 @@ Widget _title(BuildContext context) {
     ),
     onTap: () {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Receita(id: 350)));
+          context, MaterialPageRoute(builder: (context) => Receita(receita: receita)));
     },
   );
 }
@@ -345,7 +301,7 @@ class ShowLiked extends StatelessWidget {
 
 class showSearch extends StatelessWidget {
   TextEditingController _textEditingController =
-  TextEditingController(); //instanciar o objeto para controlar o campo de texto
+      TextEditingController(); //instanciar o objeto para controlar o campo de texto
 
   EntradaCheckBox entrada = new EntradaCheckBox();
 
@@ -379,7 +335,7 @@ class showSearch extends StatelessWidget {
             Container(
                 margin: EdgeInsets.only(left: 32, top: 30),
                 child:
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   Text("Filter:",
                       textAlign: TextAlign.left,
                       style: GoogleFonts.roboto(
@@ -390,14 +346,14 @@ class showSearch extends StatelessWidget {
                 ])),
             Padding(
               padding:
-              EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 32),
+                  EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 32),
               child: TextField(
                 controller: _textEditingController,
                 //controlador do nosso campo de texto
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
                 decoration:
-                InputDecoration(hintText: "Search by recipe name: "),
+                    InputDecoration(hintText: "Search by recipe name: "),
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -410,10 +366,10 @@ class showSearch extends StatelessWidget {
                 children: [
                   Container(
                       child: Column(
-                        children: [
-                          entrada,
-                        ],
-                      )),
+                    children: [
+                      entrada,
+                    ],
+                  )),
                 ],
               ),
             ),
@@ -432,24 +388,24 @@ class showSearch extends StatelessWidget {
                                 color: Color.fromARGB(250, 250, 250, 250)))),
                     style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
+                            MaterialStateProperty.all<Color>(Colors.green),
                         minimumSize: MaterialStateProperty.all(Size(70, 40))),
-                    onPressed: () =>
-                    {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ResultadosBusca(
-                                    valor: _textEditingController.text,
-                                    salgado: salgado,
-                                    doce: doce,
-                                    cafeDaManha: cafeDaManha,
-                                    almoco: almoco,
-                                    jantar: jantar,
-                                    ingredientes: [""],
-                                )),
-                      ),
+                    onPressed: () => {
+                      if( salgado == true || doce == true || cafeDaManha == true || almoco == true || jantar == true || _textEditingController.text != "" ){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResultadosBusca(
+                                valor: _textEditingController.text,
+                                salgado: salgado,
+                                doce: doce,
+                                cafeDaManha: cafeDaManha,
+                                almoco: almoco,
+                                jantar: jantar,
+                                ingredientes: [""],
+                              )),
+                        ),
+                      },
                     },
                   ),
                 ],
@@ -462,17 +418,18 @@ class showSearch extends StatelessWidget {
   }
 }
 
-
 class ShowList extends StatefulWidget {
+
   @override
   _ShowList createState() => _ShowList();
 }
 
-
 class _ShowList extends State<ShowList> {
+  initState(){
+    limparList();
+  }
   TextEditingController _textEditingController =
-  TextEditingController(); //instanciar o objeto para controlar o campo de texto
-
+      TextEditingController(); //instanciar o objeto para controlar o campo de texto
 
   @override
   Widget build(BuildContext context) {
@@ -499,7 +456,6 @@ class _ShowList extends State<ShowList> {
               ],
             ),
           ),
-
           Container(
               margin: EdgeInsets.only(left: 32, top: 30),
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -511,8 +467,6 @@ class _ShowList extends State<ShowList> {
                             fontSize: 25,
                             color: Color.fromARGB(250, 0, 0, 0))))
               ])),
-
-
           Padding(
             padding: EdgeInsets.only(left: 32, top: 25, right: 32, bottom: 10),
             child: TextField(
@@ -521,7 +475,7 @@ class _ShowList extends State<ShowList> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               decoration:
-              InputDecoration(hintText: "Enter the ingredient name: "),
+                  InputDecoration(hintText: "Enter the ingredient name: "),
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.black,
@@ -529,8 +483,6 @@ class _ShowList extends State<ShowList> {
               onSubmitted: null,
             ),
           ),
-
-
           Container(
               margin: EdgeInsets.only(right: 32),
               child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -544,8 +496,6 @@ class _ShowList extends State<ShowList> {
                       print(ingredientes);
                     }),
               ])),
-
-
           Container(
             child: Expanded(
               child: Column(
@@ -553,14 +503,12 @@ class _ShowList extends State<ShowList> {
                   Flexible(
                     child: ListView.builder(
                         itemCount: listDynamic.length,
-                        itemBuilder: (_, index) => listDynamic[index]
-                    ),
+                        itemBuilder: (_, index) => listDynamic[index]),
                   ),
                 ],
               ),
             ),
           ),
-
           Container(
             padding: EdgeInsets.only(right: 25, top: 25),
             child: Row(
@@ -576,30 +524,29 @@ class _ShowList extends State<ShowList> {
                               color: Color.fromARGB(250, 250, 250, 250)))),
                   style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                       minimumSize: MaterialStateProperty.all(Size(70, 40))),
-                  onPressed: () =>
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ResultadosBusca(
-                                  valor: "",
-                                  salgado: false,
-                                  doce: false,
-                                  cafeDaManha: false,
-                                  almoco: false,
-                                  jantar: false,
-                                  ingredientes: ingredientes,
-                              )),
-                    ),
+                  onPressed: () => {
+                    if (ingredientes.length > 0 ){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ResultadosBusca(
+                              valor: "",
+                              salgado: false,
+                              doce: false,
+                              cafeDaManha: false,
+                              almoco: false,
+                              jantar: false,
+                              ingredientes: ingredientes,
+                            )),
+                      ),
+                    },
                   },
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -626,6 +573,12 @@ class _ShowList extends State<ShowList> {
       listDynamic[i].index--;
     }
   }
+
+  limparList() {
+    ingredientes.clear();
+    listDynamic.clear();
+  }
+
 }
 
 class DynamicWidget extends StatelessWidget {
@@ -638,6 +591,7 @@ class DynamicWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(left: 17),
       child: Row(
         children: [
           IconButton(
@@ -645,7 +599,6 @@ class DynamicWidget extends StatelessWidget {
               onPressed: () {
                 removeElement(this);
               }),
-
           Text(
             "${ingredientes[index]}",
             style: TextStyle(
@@ -657,66 +610,4 @@ class DynamicWidget extends StatelessWidget {
       ),
     );
   }
-
-
 }
-
-/*
-class listIngredients extends StatelessWidget {
-  @override
-  Widget build(BuildContext context){
-    return Container(
-        child: Expanded(
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: ingredientes
-                .map(
-                  (data) => Container(
-                child: Row(
-                  children: [
-                    IconButton(
-                        icon: Icon(Icons.close_rounded,
-                            size: 25, color: Colors.red),
-                        onPressed: () {
-                        }),
-                    Text(
-                      data,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 19.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-                .toList(),
-          ),
-        ));
-  }
-}
-
-*/
-
-/*
-                  Container (
-                      margin: EdgeInsets.only(right: 32),
-                      child: Row(
-                        children: [
-                          ListView.builder(
-                          itemCount: ingredientes.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(
-                                  ingredientes[index],
-                                  style: TextStyle(
-                                    color: Colors.black
-                                  )),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-
-*/
