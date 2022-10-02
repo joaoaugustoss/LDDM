@@ -218,7 +218,7 @@ class _Receita extends State<Receita> {
                   });
                 },
                 starBuilder: (index, color) => Icon(
-                  Icons.star,
+                  Icons.restaurant_menu,
                   color: color,
                 ),
                 starCount: 5,
