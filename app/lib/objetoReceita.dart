@@ -2,6 +2,11 @@
 class Ingrediente {
   int quantidade = 0;
   String ingrediente = "";
+
+  Ingrediente(int i, String s) {
+    this.quantidade = i;
+    this.ingrediente = s;
+  }
 }
 
 class Receitas {
@@ -12,9 +17,10 @@ class Receitas {
   int numeroDePorcoes = 0;
   int quantidadeLikes = 0;
   var listaComentarios = [];
+  var modoDePreparo = [];
   List<Ingrediente> ingredientes = [];
 
-  Receitas(int id, String titulo, String descricao, String linkImagem, int numeroDePorcoes, int quantidadeLikes, var listaComentarios, List<Ingrediente> ingredientes) {
+  Receitas(int id, String titulo, String descricao, String linkImagem, int numeroDePorcoes, int quantidadeLikes, var listaComentarios, List<Ingrediente> ingredientes, var modoDePreparo) {
     this.id = id;
     this.titulo = titulo;
     this.descricao = descricao;
@@ -23,5 +29,6 @@ class Receitas {
     this.quantidadeLikes = quantidadeLikes;
     this.listaComentarios = listaComentarios;
     this.ingredientes = ingredientes;
+    this.modoDePreparo = modoDePreparo;
   }
 }
