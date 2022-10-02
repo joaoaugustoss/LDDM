@@ -106,48 +106,5 @@ class teste extends StatelessWidget {
         ],
       )
     );
-
-
-    /*
-    return Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => {
-            Navigator.pushNamed(context, "/segunda")
-          },
-          child: Image.asset("assets/images/comida3.jpg", fit: BoxFit.cover),
-        )
-    );
-    */
-
-    /*return Scaffold(
-    body: Container(
-
-
-
-        child: Row(
-          children: <Widget> [
-            Expanded(
-              child: SizedBox(
-                child: Image.asset("assets/images/comida3.jpg", fit: BoxFit.cover),
-              ),
-
-            ),
-            ElevatedButton (
-                child: Text('Foo'),
-                onPressed: () => {
-                  Navigator.pushNamed(context, "/segunda")
-                }
-            ),
-          ],
-
-        ),
-
-
-      ),
-    );
-
-     */
   }
-
 }

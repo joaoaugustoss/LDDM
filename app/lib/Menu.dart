@@ -412,7 +412,7 @@ class ShowAbout extends StatelessWidget {
                         letterSpacing: .5, fontSize: 20, color: Colors.black)),
               ])),
           Container(
-            padding: EdgeInsets.only(left: 32, top: 35, bottom: 10, right: 32),
+            padding: EdgeInsets.only(left: 32, top: 30, bottom: 10, right: 32),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               Text(
                 "Creators:",
