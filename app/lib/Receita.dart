@@ -151,17 +151,17 @@ class _Receita extends State<Receita> {
                           Text("\u2022 ",
                               style:
                               TextStyle(fontSize: 30, color: Colors.black)),
-                          Text(
+                          /*Text(
                               widget.receita.ingredientes[index].quantidade
                                   .toString(),
                               style:
-                              TextStyle(fontSize: 20, color: Colors.black)),
+                              TextStyle(fontSize: 20, color: Colors.black)),*/
                           Text(" ",
                               style:
                               TextStyle(fontSize: 20, color: Colors.black)),
-                          Text(widget.receita.ingredientes[index].ingrediente,
+                          /*Text(widget.receita.ingredientes[index].ingrediente,
                               style:
-                              TextStyle(fontSize: 20, color: Colors.black)),
+                              TextStyle(fontSize: 20, color: Colors.black)),*/
                         ],
                       );
                     },

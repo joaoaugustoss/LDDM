@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'ResultadoPesquisa.dart';
 import 'Receita.dart';
 import 'objetoReceita.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 const searchValueKey = ValueKey('Search');
 const listsValueKey = ValueKey('Lists');
@@ -138,11 +140,7 @@ class _MyAppState extends State<MyApp> {
 
 class ShowNull extends StatelessWidget {
   List<Receitas> receitas = [
-    Receitas(1, "Rice", "Good rice", "assets/images/comida2.jpg", 5, 120, [], [
-      Ingrediente(1, "Rice"),
-      Ingrediente(4, "glass of water"),
-      Ingrediente(1, "pinch of salt")
-    ], [
+    Receitas(1, "Rice", "Good rice", "assets/images/comida2.jpg", 5, 120, [], [], [
       "Preheat the oven to 200 degrees F.",
       "Whisk together the flour, pecans, granulated sugar, light brown sugar, baking powder, baking soda, and salt in a medium bowl.",
       "Whisk together the eggs, buttermilk, butter and vanilla extract and vanilla bean in a small bowl."
@@ -159,9 +157,87 @@ class ShowNull extends StatelessWidget {
         [], [], [])
   ];
 
+  _recuperaReceita() async {
+    print("entrei");
+    var uri = Uri.parse(
+        "https://api.spoonacular.com/recipes/random/?apiKey=88c955d192cc4d43a20b78ade34db952&instructionsRequired=true&number=5");
+    http.Response response;
+    response = await http.get(uri);
+    print(json.decode(response.body));
+    Map<String, dynamic> receita = new Map<String, dynamic>();
+    List<Map<String, dynamic>> retorno = [];
+    for (int i = 0; i < json.decode(response.body).length - 1; i++) {
+      // "'id' : 665469"
+      receita = json.decode(response.body)[i];
+      receitas.add(Receitas(
+          receita["id"],
+          receita["name"],
+          "summary",
+          receita["image"],
+          receita["servings"],
+          receita["aggregateLikes"],
+          [],
+          ["ingedients"],
+          receita["instructions"]));
+    }
+  }
+
+  /*@override
+  void initState() {
+    Future.delayed(Duration.zero, () => _recuperaReceita);
+  }*/
+
+  /*Widget vasco(BuildContext context) {
+    return FutureBuilder<Container>(
+        future: _recuperaReceita(),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Flexible(
+                          child: ListView.builder(
+                            itemCount: receitas.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  FillImageCard(
+                                    width: 300,
+                                    heightImage: 140,
+                                    imageProvider:
+                                        AssetImage(receitas[index].linkImagem),
+                                    tags: [
+                                      _tag(receitas[index].titulo, () {}),
+                                      _tag(receitas[index].descricao, () {})
+                                    ],
+                                    title: _title(context, receitas[index]),
+                                    description: _content(),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return Container(child: CircularProgressIndicator());
+        });
+  }*/
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    //vasco(context);
+    //print(receitas.length);
+    return /*vasco(context);*/Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
         children: [
@@ -426,63 +502,55 @@ class ShowAbout extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.only(left: 32, bottom: 10, right: 32),
-            child: Row (
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Cecília Capurucho",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        letterSpacing: .5,
-                        fontSize: 23,
-                        color: Color.fromARGB(250, 0, 0, 0)),
-                  ),
-                ]),
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Text(
+                "Cecília Capurucho",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    letterSpacing: .5,
+                    fontSize: 23,
+                    color: Color.fromARGB(250, 0, 0, 0)),
+              ),
+            ]),
           ),
           Container(
             padding: EdgeInsets.only(left: 32, bottom: 10, right: 32),
-            child: Row (
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Danielle Dias",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        letterSpacing: .5,
-                        fontSize: 23,
-                        color: Color.fromARGB(250, 0, 0, 0)),
-                  ),
-                ]),
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Text(
+                "Danielle Dias",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    letterSpacing: .5,
+                    fontSize: 23,
+                    color: Color.fromARGB(250, 0, 0, 0)),
+              ),
+            ]),
           ),
           Container(
             padding: EdgeInsets.only(left: 32, bottom: 10, right: 32),
-            child: Row (
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "João Augusto",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        letterSpacing: .5,
-                        fontSize: 23,
-                        color: Color.fromARGB(250, 0, 0, 0)),
-                  ),
-                ]),
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Text(
+                "João Augusto",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    letterSpacing: .5,
+                    fontSize: 23,
+                    color: Color.fromARGB(250, 0, 0, 0)),
+              ),
+            ]),
           ),
           Container(
             padding: EdgeInsets.only(left: 32, bottom: 30, right: 32),
-            child: Row (
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Thiago de Campos",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        letterSpacing: .5,
-                        fontSize: 23,
-                        color: Color.fromARGB(250, 0, 0, 0)),
-                  ),
-                ]),
+            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Text(
+                "Thiago de Campos",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    letterSpacing: .5,
+                    fontSize: 23,
+                    color: Color.fromARGB(250, 0, 0, 0)),
+              ),
+            ]),
           ),
         ],
       ),
