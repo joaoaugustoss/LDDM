@@ -7,12 +7,16 @@ import 'package:image_card/image_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'ResultadoPesquisa.dart';
 import 'Receita.dart';
+import 'DadosConta.dart';
+import 'Login.dart';
+import 'Cadastro.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 const searchValueKey = ValueKey('Search');
 const listsValueKey = ValueKey('Lists');
+const loginValueKey = ValueKey('Login');
 const sobreValueKey = ValueKey('Sobre');
 
 final Map<Key, MenuItemContent> menuItems = {
@@ -22,6 +26,9 @@ final Map<Key, MenuItemContent> menuItems = {
   listsValueKey: MenuItemContent(
       menuItem:
           MenuItemDefinition("Lists", listsValueKey, iconData: Icons.rule)),
+  loginValueKey: MenuItemContent(
+      menuItem:
+          MenuItemDefinition("Login", loginValueKey, iconData: Icons.login)),
   sobreValueKey: MenuItemContent(
       menuItem:
           MenuItemDefinition("About", sobreValueKey, iconData: Icons.info)),
@@ -39,6 +46,8 @@ Map<int, Color> color = {
   800: Color.fromRGBO(4, 131, 184, .9),
   900: Color.fromRGBO(4, 131, 184, 1),
 };
+
+bool logado = false;
 
 const title = 'Resquitem';
 MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
@@ -95,7 +104,9 @@ class _MyAppState extends State<MyApp> {
                                     ? showSearch()
                                     : state.selectedMenuKey == listsValueKey
                                         ? ShowList()
-                                        : const Text('Not selected'))),
+                                        : state.selectedMenuKey == loginValueKey
+                                            ? ShowLogin()
+                                            : const Text('Not selected'))),
                 menuBackgroundColor: menuColor,
                 menuBuilder: Builder(builder: getMenu),
                 menuMode: state.menuMode(context),
@@ -140,7 +151,8 @@ class _MyAppState extends State<MyApp> {
 
 class ShowNull extends StatelessWidget {
   List<Receitas> receitas = [
-    Receitas(1, "Rice", "Good rice", "assets/images/comida2.jpg", 5, 120, [], [], [
+    Receitas(
+        1, "Rice", "Good rice", "assets/images/comida2.jpg", 5, 120, [], [], [
       "Preheat the oven to 200 degrees F.",
       "Whisk together the flour, pecans, granulated sugar, light brown sugar, baking powder, baking soda, and salt in a medium bowl.",
       "Whisk together the eggs, buttermilk, butter and vanilla extract and vanilla bean in a small bowl."
@@ -237,7 +249,7 @@ class ShowNull extends StatelessWidget {
   Widget build(BuildContext context) {
     //vasco(context);
     //print(receitas.length);
-    return /*vasco(context);*/Container(
+    return /*vasco(context);*/ Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
         children: [
@@ -874,5 +886,17 @@ class DynamicWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ShowLogin extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    if (logado) {
+      return DadosCadastro();
+    } else {
+      return Cadastro();
+    }
   }
 }
