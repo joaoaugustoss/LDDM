@@ -35,7 +35,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=c757f25b6b004ac09faef6bba5c1d00a&query=${widget.valor}&type=${type}&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=88c955d192cc4d43a20b78ade34db952&query=${widget.valor}&type=${type}&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     //print(json.decode(response.body));
@@ -51,17 +51,17 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=c757f25b6b004ac09faef6bba5c1d00a");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=88c955d192cc4d43a20b78ade34db952");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
           receita["id"],
           receita["title"],
-          "summary",
+          removeTags(receita["summary"]),
           receita["image"],
           receita["servings"],
           receita["aggregateLikes"],
-          [],
+          ["comentarios"],
           getIngredients(receita),
           removeTags(receita["instructions"]),
           receita["readyInMinutes"]);

@@ -156,21 +156,21 @@ class ShowNull extends StatelessWidget {
 
   _recuperaReceita() async {
     //print("entrei");
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/random/?apiKey=c757f25b6b004ac09faef6bba5c1d00a&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/random/?apiKey=88c955d192cc4d43a20b78ade34db952&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     //print(json.decode(response.body));
     Map<String, dynamic> receita = new Map<String, dynamic>();
     Receitas receitinha;
-    int size = json.decode(response.body)["recipes"].length;
+    int size = json.decode(response.body)["recipes"].length; //list tags
     for (int i = 0; i < size; i++) {
-      // "'id' : 665469"
+      // receita["vegetarian"] == true ? tags.add("vegetarian") : nothing;
       //print(size);
       receita = json.decode(response.body)["recipes"][i];
       receitinha = Receitas(
           receita["id"],
           receita["title"],
-          "summary",
+          removeTags(receita["summary"]),
           receita["image"],
           receita["servings"],
           receita["aggregateLikes"],
