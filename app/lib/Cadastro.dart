@@ -20,7 +20,8 @@ class _Cadastro extends State<Cadastro> {
   TextEditingController _textEditingControllerNome = TextEditingController();
   TextEditingController _textEditingControllerEmail = TextEditingController();
   TextEditingController _textEditingControllerSenha = TextEditingController();
-  TextEditingController _textEditingControllerConfirmSenha = TextEditingController();
+  TextEditingController _textEditingControllerConfirmSenha =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +52,7 @@ class _Cadastro extends State<Cadastro> {
                 ],
               ),
             ),
-
-            Container (
+            Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerNome,
@@ -70,7 +70,7 @@ class _Cadastro extends State<Cadastro> {
                 },
               ),
             ),
-            Container (
+            Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerEmail,
@@ -88,8 +88,7 @@ class _Cadastro extends State<Cadastro> {
                 },
               ),
             ),
-
-            Container (
+            Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerSenha,
@@ -99,15 +98,18 @@ class _Cadastro extends State<Cadastro> {
                   hintText: 'Enter your password',
                   labelText: 'Password',
                   suffixIcon: GestureDetector(
-                    child: Icon(_showPassword == false ? Icons.visibility_off : Icons.visibility, color: Colors.black38),
-                    onTap: () {
-                      setState(() {
-                        _showPassword = !_showPassword;
-                      });
-                    }
-                  ),
+                      child: Icon(
+                          _showPassword == false
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black38),
+                      onTap: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      }),
                 ),
-                obscureText: _showPassword == false ? true: false,
+                obscureText: _showPassword == false ? true : false,
                 validator: (value) {
                   if (value == "") {
                     return 'Please enter valid password';
@@ -116,9 +118,8 @@ class _Cadastro extends State<Cadastro> {
                 },
               ),
             ),
-
-            Container (
-              margin: EdgeInsets.only(left: 32, top: 30, right: 32),
+            Container(
+              margin: EdgeInsets.only(left: 32, top: 30, bottom: 50, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerConfirmSenha,
                 keyboardType: TextInputType.text,
@@ -127,15 +128,18 @@ class _Cadastro extends State<Cadastro> {
                   hintText: 'Confirm your password',
                   labelText: 'Confirm Password',
                   suffixIcon: GestureDetector(
-                      child: Icon(_showConfirmPassword == false ? Icons.visibility_off : Icons.visibility, color: Colors.black38),
+                      child: Icon(
+                          _showConfirmPassword == false
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black38),
                       onTap: () {
                         setState(() {
                           _showConfirmPassword = !_showConfirmPassword;
                         });
-                      }
-                  ),
+                      }),
                 ),
-                obscureText: _showConfirmPassword == false ? true: false,
+                obscureText: _showConfirmPassword == false ? true : false,
                 validator: (value) {
                   if (value == "") {
                     return 'Please enter valid password';
@@ -145,53 +149,46 @@ class _Cadastro extends State<Cadastro> {
               ),
             ),
 
-            Container (
-              margin: EdgeInsets.only(left: 32, top: 50, right: 32),
-              child: Row (
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    child: Container (
-                      margin: EdgeInsets.only(right: 50),
-                      child: Text(
-                        "Already have an account?",
-                        style: TextStyle(
+            ElevatedButton(
+              child: Text("Create",
+                  style: GoogleFonts.roboto(
+                      textStyle: TextStyle(
+                          letterSpacing: .5,
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
-                    },
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(250, 250, 250, 250)))),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.green),
+                  minimumSize: MaterialStateProperty.all(Size(70, 40))),
+              onPressed: () => {
+                //if (ingredientes.length > 0)
+                //{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                ),
+                // },
+              },
+            ),
+
+            InkWell(
+              child: Container(
+                margin: EdgeInsets.only(right: 32, left: 32, top: 30),
+                child: Text(
+                  "Already have an account?",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
                   ),
-                  ElevatedButton(
-                    child: Text("Create",
-                        style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                                letterSpacing: .5,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(250, 250, 250, 250)))),
-                    style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
-                        minimumSize: MaterialStateProperty.all(Size(70, 40))),
-                    onPressed: () => {
-                      //if (ingredientes.length > 0)
-                      //{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ShowNull()),
-                      ),
-                      // },
-                    },
-                  ),
-                ],
+                ),
               ),
-              ),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Login()));
+              },
+            ),
           ],
         ),
       ),

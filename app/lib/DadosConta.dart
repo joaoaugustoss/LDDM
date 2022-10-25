@@ -40,7 +40,6 @@ class _DadosCadastro extends State<DadosCadastro> {
                 ],
               ),
             ),
-
            ],
         ),
       ),
