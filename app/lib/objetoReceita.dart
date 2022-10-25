@@ -1,4 +1,3 @@
-
 /*class Ingrediente {
   int quantidade = 0;
   String ingrediente = "";
@@ -19,8 +18,19 @@ class Receitas {
   var listaComentarios = [];
   String modoDePreparo = "";
   List<String> ingredientes = [];
+  int timeSpent = 0;
 
-  Receitas(int id, String titulo, String descricao, String linkImagem, int numeroDePorcoes, int quantidadeLikes, var listaComentarios, List<String> ingredientes, String modoDePreparo) {
+  Receitas(
+      int id,
+      String titulo,
+      String descricao,
+      String linkImagem,
+      int numeroDePorcoes,
+      int quantidadeLikes,
+      var listaComentarios,
+      List<String> ingredientes,
+      String modoDePreparo,
+      int timeSpent) {
     this.id = id;
     this.titulo = titulo;
     this.descricao = descricao;
@@ -30,5 +40,6 @@ class Receitas {
     this.listaComentarios = listaComentarios;
     this.ingredientes = ingredientes;
     this.modoDePreparo = modoDePreparo;
+    this.timeSpent = timeSpent;
   }
 }

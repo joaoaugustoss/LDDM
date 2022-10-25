@@ -176,7 +176,8 @@ class ShowNull extends StatelessWidget {
           receita["aggregateLikes"],
           [],
           getIngredients(receita),
-          removeTags(receita["instructions"]));
+          removeTags(receita["instructions"]),
+          receita["readyInMinutes"]);
       receitas.add(receitinha);
     }
   }
@@ -237,7 +238,7 @@ class ShowNull extends StatelessWidget {
                                     imageProvider:
                                         NetworkImage(receitas[index].linkImagem),
                                     tags: [
-                                      _tag(receitas[index].titulo, () {}),
+                                      _tag(("${receitas[index].timeSpent} min"), () {}),
                                       _tag(receitas[index].descricao, () {})
                                     ],
                                     title: _title(context, receitas[index]),
