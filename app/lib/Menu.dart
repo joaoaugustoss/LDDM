@@ -255,7 +255,6 @@ class ShowNull extends StatelessWidget {
               ),
             );
           }
-          return Container(child: CircularProgressIndicator());
         });
   }
 
