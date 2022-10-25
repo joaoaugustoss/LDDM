@@ -13,6 +13,7 @@ import 'Cadastro.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '/auth/secure.dart';
 
 const searchValueKey = ValueKey('Search');
 const listsValueKey = ValueKey('Lists');
@@ -156,7 +157,7 @@ class ShowNull extends StatelessWidget {
 
   _recuperaReceita() async {
     //print("entrei");
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/random/?apiKey=88c955d192cc4d43a20b78ade34db952&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/random/?apiKey=$spoon_Key1&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     //print(json.decode(response.body));

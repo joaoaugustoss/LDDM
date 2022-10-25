@@ -1,3 +1,4 @@
+import 'package:app/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:image_card/image_card.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
@@ -5,6 +6,7 @@ import 'Receita.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '/auth/secure.dart';
 
 class ResultadosBusca extends StatefulWidget {
   String valor;
@@ -35,7 +37,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=88c955d192cc4d43a20b78ade34db952&query=${widget.valor}&type=${type}&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=$spoon_Key1&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     //print(json.decode(response.body));
@@ -49,9 +51,43 @@ class _ResultadosBusca extends State<ResultadosBusca> {
       ids.add(receita["id"]);
     }
 
+    for (int i = 0; i < ids.length; i++) {
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key1");
+      response = await http.get(uri);
+      receita = json.decode(response.body);
+      receitinha = Receitas(
+          receita["id"],
+          receita["title"],
+          removeTags(receita["summary"]),
+          receita["image"],
+          receita["servings"],
+          receita["aggregateLikes"],
+          ["comentarios"],
+          getIngredients(receita),
+          removeTags(receita["instructions"]),
+          receita["readyInMinutes"]);
+      receitas.add(receitinha);
+    }
+  }
+
+  _ingredientReceita() async {
+    String ingredient = fromList();
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=$spoon_Key1&ingredients=$ingredient&number=5");
+    http.Response response;
+    response = await http.get(uri);
+    //print(json.decode(response.body));
+    Map<String, dynamic> receita = new Map<String, dynamic>();
+    Receitas receitinha;
+    int size = json.decode(response.body).length;
+    List<int> ids = [];
+
+    for(int i = 0; i < size; i++){
+      receita = json.decode(response.body)[i];
+      ids.add(receita["id"]);
+    }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=88c955d192cc4d43a20b78ade34db952");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key1");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -113,9 +149,22 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     return resp;
   }
 
+  String fromList(){
+    String resp = "";
+
+    for(int i = 0; i < ingredientes.length; i++){
+      resp += ingredientes[i];
+      if(i != ingredientes.length-1) {
+        resp += ",+";
+      }
+    }
+    print(resp);
+    return resp;
+  }
+
   FutureBuilder vasco(BuildContext context) {
     return FutureBuilder(
-        future: _recuperaReceita(),
+        future: ingredientes.isEmpty ? _recuperaReceita() : _ingredientReceita(),
         builder: (context, AsyncSnapshot snapshot) {
           if (receitas.isEmpty) {
             print("vasco");
