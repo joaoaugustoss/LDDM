@@ -58,7 +58,7 @@ class _Receita extends State<Receita> {
                     borderRadius: BorderRadius.circular(20.0),
                     child: Material(
                       elevation: 2.0,
-                      child: Image.asset(widget.receita.linkImagem),
+                      child: Image.network(widget.receita.linkImagem),
                     ),
                   ),
                 ],
@@ -148,20 +148,18 @@ class _Receita extends State<Receita> {
                     itemBuilder: (context, index) {
                       return Row(
                         children: [
-                          Text("\u2022 ",
-                              style:
-                              TextStyle(fontSize: 30, color: Colors.black)),
-                          /*Text(
-                              widget.receita.ingredientes[index].quantidade
-                                  .toString(),
-                              style:
-                              TextStyle(fontSize: 20, color: Colors.black)),*/
-                          Text(" ",
-                              style:
-                              TextStyle(fontSize: 20, color: Colors.black)),
-                          /*Text(widget.receita.ingredientes[index].ingrediente,
-                              style:
-                              TextStyle(fontSize: 20, color: Colors.black)),*/
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text("\u2022 ",
+                                    style: TextStyle(
+                                        fontSize: 30, color: Colors.black)),
+                                Text(widget.receita.ingredientes[index],
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black)),
+                              ],
+                            ),
+                          ),
                         ],
                       );
                     },
@@ -190,34 +188,9 @@ class _Receita extends State<Receita> {
               padding: EdgeInsets.only(left: 32, top: 10, right: 32),
               child: Column(
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.receita.modoDePreparo.length,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        children: [
-                          Flexible(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(top:5, bottom: 2),
-                                      child: Text("Step ${index +1}:",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold)
-                                      ),
-                                    ),
-                                    Text(widget.receita.modoDePreparo[index],
-                                        textAlign: TextAlign.justify,
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.black)),
-                                  ]))
-                        ],
-                      );
-                    },
-                  ),
+                  Text(widget.receita.modoDePreparo,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 20, color: Colors.black)),
                 ],
               ),
             ),
@@ -304,11 +277,10 @@ class _Receita extends State<Receita> {
                           value = v;
                         });
                       },
-                      starBuilder: (index, color) =>
-                          Icon(
-                            Icons.restaurant_menu,
-                            color: color,
-                          ),
+                      starBuilder: (index, color) => Icon(
+                        Icons.restaurant_menu,
+                        color: color,
+                      ),
                       starCount: 5,
                       starSize: 20,
                       valueLabelColor: const Color(0xff9b9b9b),

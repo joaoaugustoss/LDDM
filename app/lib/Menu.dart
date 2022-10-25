@@ -151,59 +151,73 @@ class _MyAppState extends State<MyApp> {
 
 class ShowNull extends StatelessWidget {
   List<Receitas> receitas = [
-    Receitas(
-        1, "Rice", "Good rice", "assets/images/comida2.jpg", 5, 120, [], [], [
-      "Preheat the oven to 200 degrees F.",
-      "Whisk together the flour, pecans, granulated sugar, light brown sugar, baking powder, baking soda, and salt in a medium bowl.",
-      "Whisk together the eggs, buttermilk, butter and vanilla extract and vanilla bean in a small bowl."
-    ]),
-    Receitas(2, "Bean", "Good bean", "assets/images/comida2.jpg", 5, 120, [],
-        [], ["step 1", "step 2"]),
-    Receitas(3, "Potato", "Good potato", "assets/images/comida2.jpg", 5, 120,
-        [], [], []),
-    Receitas(4, "Orange", "Good orange", "assets/images/comida3.jpg", 5, 120,
-        [], [], []),
-    Receitas(5, "Lemon", "Good lemon", "assets/images/comida3.jpg", 5, 120, [],
-        [], []),
-    Receitas(6, "Chicken", "Good chicken", "assets/images/comida3.jpg", 5, 120,
-        [], [], [])
+
   ];
 
   _recuperaReceita() async {
-    print("entrei");
-    var uri = Uri.parse(
-        "https://api.spoonacular.com/recipes/random/?apiKey=88c955d192cc4d43a20b78ade34db952&instructionsRequired=true&number=5");
+    //print("entrei");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/random/?apiKey=c757f25b6b004ac09faef6bba5c1d00a&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
-    print(json.decode(response.body));
+    //print(json.decode(response.body));
     Map<String, dynamic> receita = new Map<String, dynamic>();
-    List<Map<String, dynamic>> retorno = [];
-    for (int i = 0; i < json.decode(response.body).length - 1; i++) {
+    Receitas receitinha;
+    int size = json.decode(response.body)["recipes"].length;
+    for (int i = 0; i < size; i++) {
       // "'id' : 665469"
-      receita = json.decode(response.body)[i];
-      receitas.add(Receitas(
+      //print(size);
+      receita = json.decode(response.body)["recipes"][i];
+      receitinha = Receitas(
           receita["id"],
-          receita["name"],
+          receita["title"],
           "summary",
           receita["image"],
           receita["servings"],
           receita["aggregateLikes"],
           [],
-          ["ingedients"],
-          receita["instructions"]));
+          getIngredients(receita),
+          removeTags(receita["instructions"]));
+      receitas.add(receitinha);
     }
   }
 
-  /*@override
-  void initState() {
-    Future.delayed(Duration.zero, () => _recuperaReceita);
-  }*/
+  String removeTags(String line){
+    String resp = "";
+    int i = 0;
+    while(i < line.length){ //enquanto i for menor que o tamanho da String linha
+      if(line[i] == '<'){ // é testado para verificar se o contador i ainda está dentro das tags
+        i++;
+        while(line[i] != '>') i++; //ao encontrar o sinal de fechamento das tags o laço de repetição é encerrado
+      } else if(line[i] == '&'){ //mesmo tratamento de cima mas para outras exceções presentes em alguns outros arquivos
+        i++;
+        while(line[i] != ';') i++;
+      } else { //o que estiver fora das tags é concatenado a String resp a ser retornada
+        resp += line[i];
+      }
+      i++;
+    }
+    return resp;
+  }
 
-  /*Widget vasco(BuildContext context) {
-    return FutureBuilder<Container>(
+  List<String> getIngredients(Map<String, dynamic> obj){
+    List<String> resp = [];
+
+    for(int i = 0; i < obj["extendedIngredients"].length; i++){
+      resp.add(obj["extendedIngredients"][i]["original"]);
+    }
+
+    return resp;
+  }
+
+  FutureBuilder vasco(BuildContext context) {
+    return FutureBuilder(
         future: _recuperaReceita(),
-        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-          if (snapshot.hasData) {
+        builder: (context, AsyncSnapshot snapshot) {
+          if (receitas.isEmpty) {
+            print("vasco");
+            return Center(child: CircularProgressIndicator());
+          } else {
+            print("da Gama");
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Column(
@@ -221,7 +235,7 @@ class ShowNull extends StatelessWidget {
                                     width: 300,
                                     heightImage: 140,
                                     imageProvider:
-                                        AssetImage(receitas[index].linkImagem),
+                                        NetworkImage(receitas[index].linkImagem),
                                     tags: [
                                       _tag(receitas[index].titulo, () {}),
                                       _tag(receitas[index].descricao, () {})
@@ -243,48 +257,11 @@ class ShowNull extends StatelessWidget {
           }
           return Container(child: CircularProgressIndicator());
         });
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
-    //vasco(context);
-    //print(receitas.length);
-    return /*vasco(context);*/ Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Flexible(
-                  child: ListView.builder(
-                    itemCount: receitas.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          FillImageCard(
-                            width: 300,
-                            heightImage: 140,
-                            imageProvider:
-                                AssetImage(receitas[index].linkImagem),
-                            tags: [
-                              _tag(receitas[index].titulo, () {}),
-                              _tag(receitas[index].descricao, () {})
-                            ],
-                            title: _title(context, receitas[index]),
-                            description: _content(),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    return vasco(context);
   }
 }
 

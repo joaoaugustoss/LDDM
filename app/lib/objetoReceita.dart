@@ -17,10 +17,10 @@ class Receitas {
   int numeroDePorcoes = 0;
   int quantidadeLikes = 0;
   var listaComentarios = [];
-  var modoDePreparo = [];
+  String modoDePreparo = "";
   List<String> ingredientes = [];
 
-  Receitas(int id, String titulo, String descricao, String linkImagem, int numeroDePorcoes, int quantidadeLikes, var listaComentarios, List<String> ingredientes, var modoDePreparo) {
+  Receitas(int id, String titulo, String descricao, String linkImagem, int numeroDePorcoes, int quantidadeLikes, var listaComentarios, List<String> ingredientes, String modoDePreparo) {
     this.id = id;
     this.titulo = titulo;
     this.descricao = descricao;
