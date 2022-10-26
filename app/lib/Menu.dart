@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:navigation_drawer_menu/navigation_drawer.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_menu_frame.dart';
@@ -47,8 +48,6 @@ Map<int, Color> color = {
   800: Color.fromRGBO(4, 131, 184, .9),
   900: Color.fromRGBO(4, 131, 184, 1),
 };
-
-bool logado = true;
 
 const title = 'Resquitem';
 MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
@@ -230,10 +229,13 @@ class ShowNull extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom:40),
+                      margin: EdgeInsets.only(bottom: 40),
                       child: Text(
                         "Could not find any recipe.",
-                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     ElevatedButton(
@@ -242,7 +244,8 @@ class ShowNull extends StatelessWidget {
                         style: TextStyle(fontSize: 25),
                       ),
                       onPressed: () => {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp())),
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => MyApp())),
                       },
                       style: ButtonStyle(
                           minimumSize:
@@ -917,12 +920,34 @@ class DynamicWidget extends StatelessWidget {
 }
 
 class ShowLogin extends StatelessWidget {
+
+  String logado = "null";
+
   @override
   Widget build(BuildContext context) {
-    if (logado) {
+    if (logado != "null") {
       return DadosConta();
     } else {
       return Cadastro();
     }
+  }
+
+  _salvarDados() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        "isLogged", logado); // a chave será usada para recuperar dados
+    print("Operação salvar: $logado");
+  }
+
+  _recuperarDados() async {
+    final prefs = await SharedPreferences.getInstance();
+    logado = prefs.getString("isLogged") ?? "null";
+    print("Operação recuperar: $logado");
+  }
+
+  _removerDados() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("isLogged");
+    print("Operação remover");
   }
 }
