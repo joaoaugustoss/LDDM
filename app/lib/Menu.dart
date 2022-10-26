@@ -47,7 +47,7 @@ Map<int, Color> color = {
   900: Color.fromRGBO(4, 131, 184, 1),
 };
 
-bool logado = false;
+bool logado = true;
 
 const title = 'Resquitem';
 MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
@@ -871,7 +871,7 @@ class ShowLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (logado) {
-      return DadosCadastro();
+      return DadosConta();
     } else {
       return Cadastro();
     }
