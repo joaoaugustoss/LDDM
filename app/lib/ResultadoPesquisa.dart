@@ -32,14 +32,16 @@ class ResultadosBusca extends StatefulWidget {
 }
 
 class _ResultadosBusca extends State<ResultadosBusca> {
+  int code = 200;
   final NavigationDrawerState state = NavigationDrawerState();
   List<Receitas> receitas = [];
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=$spoon_Key1&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=$spoon_Key2&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
+    code = response.statusCode;
     //print(json.decode(response.body));
     Map<String, dynamic> receita = new Map<String, dynamic>();
     Receitas receitinha;
@@ -52,7 +54,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key1");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key2");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -65,16 +67,19 @@ class _ResultadosBusca extends State<ResultadosBusca> {
           ["comentarios"],
           getIngredients(receita),
           removeTags(receita["instructions"]),
-          receita["readyInMinutes"]);
+          receita["readyInMinutes"],
+          receita["vegan"],
+          receita["vegetarian"]);
       receitas.add(receitinha);
     }
   }
 
   _ingredientReceita() async {
     String ingredient = fromList();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=$spoon_Key1&ingredients=$ingredient&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=$spoon_Key2&ingredients=$ingredient&number=5");
     http.Response response;
     response = await http.get(uri);
+    code = response.statusCode;
     //print(json.decode(response.body));
     Map<String, dynamic> receita = new Map<String, dynamic>();
     Receitas receitinha;
@@ -87,7 +92,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key1");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key2");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -100,7 +105,9 @@ class _ResultadosBusca extends State<ResultadosBusca> {
           ["comentarios"],
           getIngredients(receita),
           removeTags(receita["instructions"]),
-          receita["readyInMinutes"]);
+          receita["readyInMinutes"],
+          receita["vegan"],
+          receita["vegetarian"]);
       receitas.add(receitinha);
     }
   }
@@ -115,8 +122,9 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     (widget.jantar == true ? aux.add("snack") : resp);
     for(int i = 0; i < aux.length; i++){
       resp += aux[i];
-      if(i != aux.length-1)
+      if(i != aux.length-1) {
         resp += ",";
+      }
     }
     return resp;
   }
@@ -158,7 +166,6 @@ class _ResultadosBusca extends State<ResultadosBusca> {
         resp += ",+";
       }
     }
-    print(resp);
     return resp;
   }
 
@@ -166,7 +173,38 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     return FutureBuilder(
         future: ingredientes.isEmpty ? _recuperaReceita() : _ingredientReceita(),
         builder: (context, AsyncSnapshot snapshot) {
-          if (receitas.isEmpty) {
+          if (code != 200) {
+            print("da colina");
+            return Container(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom:40),
+                      child: Text(
+                        "Could not find any recipe.",
+                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    ElevatedButton(
+                      child: Text(
+                        'Back',
+                        style: TextStyle(fontSize: 25),
+                      ),
+                      onPressed: () => {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp())),
+                      },
+                      style: ButtonStyle(
+                          minimumSize:
+                          MaterialStateProperty.all(Size(150, 60))),
+                    )
+                  ],
+                ),
+              ),
+            );
+          } else if (receitas.isEmpty) {
             print("vasco");
             return Center(child: CircularProgressIndicator());
           } else {
@@ -191,7 +229,8 @@ class _ResultadosBusca extends State<ResultadosBusca> {
                                     NetworkImage(receitas[index].linkImagem),
                                     tags: [
                                       _tag(("${receitas[index].timeSpent} min"), () {}),
-                                      _tag(receitas[index].descricao, () {})
+                                      _tag((receitas[index].vegan == true? "Vegan" : "Not Vegan"), () {}),
+                                      _tag((receitas[index].vegetarian == true? "Vegetarian" : "Not Vegetarian"), () {}),
                                     ],
                                     title: _title(context, receitas[index]),
                                     description: _content(),
