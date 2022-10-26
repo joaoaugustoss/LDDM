@@ -127,7 +127,11 @@ class _Cadastro extends State<Cadastro> {
                   hintText: 'Confirm your password',
                   labelText: 'Confirm Password',
                   suffixIcon: GestureDetector(
-                      child: Icon(_showConfirmPassword == false ? Icons.visibility_off : Icons.visibility, color: Colors.black38),
+                      child: Icon(
+                          _showConfirmPassword == false
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black38),
                       onTap: () {
                         setState(() {
                           _showConfirmPassword = !_showConfirmPassword;
@@ -145,53 +149,46 @@ class _Cadastro extends State<Cadastro> {
               ),
             ),
 
-            Container (
-              margin: EdgeInsets.only(left: 32, top: 50, right: 32),
-              child: Row (
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    child: Container (
-                      margin: EdgeInsets.only(right: 50),
-                      child: Text(
-                        "Already have an account?",
-                        style: TextStyle(
+            ElevatedButton(
+              child: Text("Create",
+                  style: GoogleFonts.roboto(
+                      textStyle: TextStyle(
+                          letterSpacing: .5,
                           fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
-                    },
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(250, 250, 250, 250)))),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.green),
+                  minimumSize: MaterialStateProperty.all(Size(70, 40))),
+              onPressed: () => {
+                //if (ingredientes.length > 0)
+                //{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                ),
+                // },
+              },
+            ),
+
+            InkWell(
+              child: Container(
+                margin: EdgeInsets.only(right: 32, left: 32, top: 30),
+                child: Text(
+                  "Already have an account?",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
                   ),
-                  ElevatedButton(
-                    child: Text("Create",
-                        style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                                letterSpacing: .5,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(250, 250, 250, 250)))),
-                    style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
-                        minimumSize: MaterialStateProperty.all(Size(70, 40))),
-                    onPressed: () => {
-                      //if (ingredientes.length > 0)
-                      //{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ShowNull()),
-                      ),
-                      // },
-                    },
-                  ),
-                ],
+                ),
               ),
-              ),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Login()));
+              },
+            ),
           ],
         ),
       ),
