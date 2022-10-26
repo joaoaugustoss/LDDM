@@ -13,6 +13,7 @@ import 'Cadastro.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '/auth/secure.dart';
 
 const searchValueKey = ValueKey('Search');
 const listsValueKey = ValueKey('Lists');
@@ -150,16 +151,15 @@ class _MyAppState extends State<MyApp> {
 }
 
 class ShowNull extends StatelessWidget {
-  List<Receitas> receitas = [
-
-  ];
+  int code = 200;
+  List<Receitas> receitas = [];
 
   _recuperaReceita() async {
-    //print("entrei");
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/random/?apiKey=88c955d192cc4d43a20b78ade34db952&instructionsRequired=true&number=5");
+    var uri = Uri.parse(
+        "https://api.spoonacular.com/recipes/random/?apiKey=$spoon_Key2&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
-    //print(json.decode(response.body));
+    code = response.statusCode;
     Map<String, dynamic> receita = new Map<String, dynamic>();
     Receitas receitinha;
     int size = json.decode(response.body)["recipes"].length; //list tags
@@ -177,22 +177,29 @@ class ShowNull extends StatelessWidget {
           [],
           getIngredients(receita),
           removeTags(receita["instructions"]),
-          receita["readyInMinutes"]);
+          receita["readyInMinutes"],
+          receita["vegan"],
+          receita["vegetarian"]);
       receitas.add(receitinha);
     }
   }
 
-  String removeTags(String line){
+  String removeTags(String line) {
     String resp = "";
     int i = 0;
-    while(i < line.length){ //enquanto i for menor que o tamanho da String linha
-      if(line[i] == '<'){ // é testado para verificar se o contador i ainda está dentro das tags
+    while (i < line.length) {
+      //enquanto i for menor que o tamanho da String linha
+      if (line[i] == '<') {
+        // é testado para verificar se o contador i ainda está dentro das tags
         i++;
-        while(line[i] != '>') i++; //ao encontrar o sinal de fechamento das tags o laço de repetição é encerrado
-      } else if(line[i] == '&'){ //mesmo tratamento de cima mas para outras exceções presentes em alguns outros arquivos
+        while (line[i] != '>')
+          i++; //ao encontrar o sinal de fechamento das tags o laço de repetição é encerrado
+      } else if (line[i] == '&') {
+        //mesmo tratamento de cima mas para outras exceções presentes em alguns outros arquivos
         i++;
-        while(line[i] != ';') i++;
-      } else { //o que estiver fora das tags é concatenado a String resp a ser retornada
+        while (line[i] != ';') i++;
+      } else {
+        //o que estiver fora das tags é concatenado a String resp a ser retornada
         resp += line[i];
       }
       i++;
@@ -200,10 +207,10 @@ class ShowNull extends StatelessWidget {
     return resp;
   }
 
-  List<String> getIngredients(Map<String, dynamic> obj){
+  List<String> getIngredients(Map<String, dynamic> obj) {
     List<String> resp = [];
 
-    for(int i = 0; i < obj["extendedIngredients"].length; i++){
+    for (int i = 0; i < obj["extendedIngredients"].length; i++) {
       resp.add(obj["extendedIngredients"][i]["original"]);
     }
 
@@ -214,7 +221,38 @@ class ShowNull extends StatelessWidget {
     return FutureBuilder(
         future: _recuperaReceita(),
         builder: (context, AsyncSnapshot snapshot) {
-          if (receitas.isEmpty) {
+          if (code != 200) {
+            print("da colina");
+            return Container(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom:40),
+                      child: Text(
+                        "Could not find any recipe.",
+                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    ElevatedButton(
+                      child: Text(
+                        'Back',
+                        style: TextStyle(fontSize: 25),
+                      ),
+                      onPressed: () => {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp())),
+                      },
+                      style: ButtonStyle(
+                          minimumSize:
+                              MaterialStateProperty.all(Size(150, 60))),
+                    )
+                  ],
+                ),
+              ),
+            );
+          } else if (receitas.isEmpty) {
             print("vasco");
             return Center(child: CircularProgressIndicator());
           } else {
@@ -235,11 +273,21 @@ class ShowNull extends StatelessWidget {
                                   FillImageCard(
                                     width: 300,
                                     heightImage: 140,
-                                    imageProvider:
-                                        NetworkImage(receitas[index].linkImagem),
+                                    imageProvider: NetworkImage(
+                                        receitas[index].linkImagem),
                                     tags: [
-                                      _tag(("${receitas[index].timeSpent} min"), () {}),
-                                      _tag(receitas[index].descricao, () {})
+                                      _tag(("${receitas[index].timeSpent} min"),
+                                          () {}),
+                                      _tag(
+                                          (receitas[index].vegan == true
+                                              ? "Vegan"
+                                              : "Not Vegan"),
+                                          () {}),
+                                      _tag(
+                                          (receitas[index].vegetarian == true
+                                              ? "Vegetarian"
+                                              : "Not Vegetarian"),
+                                          () {}),
                                     ],
                                     title: _title(context, receitas[index]),
                                     description: _content(),
@@ -263,6 +311,8 @@ class ShowNull extends StatelessWidget {
   Widget build(BuildContext context) {
     return vasco(context);
   }
+
+  void timeOut() {}
 }
 
 Widget _title(BuildContext context, Receitas receita) {
@@ -867,7 +917,6 @@ class DynamicWidget extends StatelessWidget {
 }
 
 class ShowLogin extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     if (logado) {

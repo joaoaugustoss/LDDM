@@ -19,6 +19,8 @@ class Receitas {
   String modoDePreparo = "";
   List<String> ingredientes = [];
   int timeSpent = 0;
+  bool vegan = false;
+  bool vegetarian = false;
 
   Receitas(
       int id,
@@ -30,7 +32,7 @@ class Receitas {
       var listaComentarios,
       List<String> ingredientes,
       String modoDePreparo,
-      int timeSpent) {
+      int timeSpent, bool vegan, bool vegetarian) {
     this.id = id;
     this.titulo = titulo;
     this.descricao = descricao;
@@ -41,5 +43,7 @@ class Receitas {
     this.ingredientes = ingredientes;
     this.modoDePreparo = modoDePreparo;
     this.timeSpent = timeSpent;
+    this.vegan = vegan;
+    this.vegetarian = vegetarian;
   }
 }
