@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:email_validator/email_validator.dart';
 
 class DadosConta extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _DadosConta extends State<DadosConta> {
   bool _showOldPassword = false;
   bool _showNewPassword = false;
   bool _showConfirmNewPassword = false;
+  String _errorMessage = "";
 
   TextEditingController _textEditingControllerNome = TextEditingController();
   TextEditingController _textEditingControllerEmail = TextEditingController();
@@ -76,11 +78,8 @@ class _DadosConta extends State<DadosConta> {
                   hintText: 'Enter your e-mail for login',
                   labelText: 'E-mail',
                 ),
-                validator: (value) {
-                  if (value == "") {
-                    return 'Please enter valid e-mail';
-                  }
-                  return null;
+                onChanged: (val){
+                  validateEmail(val);
                 },
               ),
             ),
@@ -200,6 +199,11 @@ class _DadosConta extends State<DadosConta> {
                 )
             ),
 
+            Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: Text(_errorMessage, style: TextStyle(color: Colors.red),),
+            ),
+
             Container(
               margin: EdgeInsets.only(left: 32, top: 50, right: 32, bottom: 50),
               child: Row(
@@ -222,6 +226,8 @@ class _DadosConta extends State<DadosConta> {
                           minimumSize: MaterialStateProperty.all(Size(70, 40))),
                       onPressed: () =>
                       {
+                        // TODO: Redirecionar para a tela inicial e alterar Preferends Shared como deslogado e excluir do banco
+                        // TODO: Verificar se coloca um modal para confirmar exclusão de cadastro
                         //if (ingredientes.length > 0)
                         //{
                         //Navigator.push(
@@ -248,13 +254,11 @@ class _DadosConta extends State<DadosConta> {
                           minimumSize: MaterialStateProperty.all(Size(70, 40))),
                       onPressed: () =>
                       {
-                        //if (ingredientes.length > 0)
-                        //{
-                        //Navigator.push(
-                        context,
-                        //MaterialPageRoute(builder: (context) => ShowNull()),
-                        //),
-                        // },
+                         if (_textEditingControllerEmail.text != "" && EmailValidator.validate(_textEditingControllerEmail.text, true)) {
+                           print("email ok"),
+                           // TODO: Consultar no banco se senha antiga confere, pois só pode mudar de e-mail ao confirmar senha
+                         }
+                         // TODO: Verificar o que tá alterando para validar se pode ou não ter uma ação ao apertar Edit
                       },
                     ),
                   )
@@ -265,5 +269,20 @@ class _DadosConta extends State<DadosConta> {
         ),
       ),
     );
+  }
+  void validateEmail(String val) {
+    if(val.isEmpty){
+      setState(() {
+        _errorMessage = "Email can not be empty.";
+      });
+    }else if(!EmailValidator.validate(val, true)){
+      setState(() {
+        _errorMessage = "Invalid Email Address.";
+      });
+    }else{
+      setState(() {
+        _errorMessage = "";
+      });
+    }
   }
 }

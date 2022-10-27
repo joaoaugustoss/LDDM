@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Menu.dart';
 import 'Login.dart';
+
 
 class Cadastro extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class _Cadastro extends State<Cadastro> {
   final _formKey = GlobalKey<FormState>();
   bool _showPassword = false;
   bool _showConfirmPassword = false;
+  String _errorMessage = "";
 
   TextEditingController _textEditingControllerNome = TextEditingController();
   TextEditingController _textEditingControllerEmail = TextEditingController();
@@ -81,11 +84,8 @@ class _Cadastro extends State<Cadastro> {
                   hintText: 'Enter your e-mail for login',
                   labelText: 'E-mail',
                 ),
-                validator: (value) {
-                  if (value == "") {
-                    return 'Please enter valid e-mail';
-                  }
-                  return null;
+                onChanged: (val){
+                  validateEmail(val);
                 },
               ),
             ),
@@ -150,6 +150,11 @@ class _Cadastro extends State<Cadastro> {
               ),
             ),
 
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Text(_errorMessage, style: TextStyle(color: Colors.red),),
+            ),
+
             ElevatedButton(
               child: Text("Create",
                   style: GoogleFonts.roboto(
@@ -163,13 +168,16 @@ class _Cadastro extends State<Cadastro> {
                       MaterialStateProperty.all<Color>(Colors.green),
                   minimumSize: MaterialStateProperty.all(Size(70, 40))),
               onPressed: () => {
-                //if (id != -1)
-                //{
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
-                ),
-                // },
+
+                if (_textEditingControllerNome.text != "" && _textEditingControllerEmail.text != "" && _textEditingControllerSenha.text != "" && _textEditingControllerConfirmSenha.text != "") {
+                  if (_textEditingControllerSenha.text == _textEditingControllerConfirmSenha.text && EmailValidator.validate(_textEditingControllerEmail.text, true))
+                    {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                      ),
+                    }
+                }
               },
             ),
 
@@ -201,5 +209,21 @@ class _Cadastro extends State<Cadastro> {
     await prefs.setInt(
         "isLogged", logado); // a chave será usada para recuperar dados
     print("Operação salvar: $logado");
+  }
+
+  void validateEmail(String val) {
+    if(val.isEmpty){
+      setState(() {
+        _errorMessage = "Email can not be empty.";
+      });
+    }else if(!EmailValidator.validate(val, true)){
+      setState(() {
+        _errorMessage = "Invalid Email Address.";
+      });
+    }else{
+      setState(() {
+        _errorMessage = "";
+      });
+    }
   }
 }
