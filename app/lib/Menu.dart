@@ -9,12 +9,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'ResultadoPesquisa.dart';
 import 'Receita.dart';
 import 'DadosConta.dart';
-import 'Login.dart';
 import 'Cadastro.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '/auth/secure.dart';
+//import '/auth/secure.dart';
 
 const searchValueKey = ValueKey('Search');
 const listsValueKey = ValueKey('Lists');
@@ -50,6 +49,7 @@ Map<int, Color> color = {
 };
 
 const title = 'Resquitem';
+int logado = -1;
 MaterialColor menuColor = MaterialColor(0xFFE5E5E5, color);
 MaterialColor sltColor = MaterialColor(0XFFFFFF, color);
 
@@ -69,6 +69,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final NavigationDrawerState state = NavigationDrawerState();
+
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  void isLogado() async {
+    logado = await _prefs.then((SharedPreferences prefs) {
+      return prefs.getInt('isLogged') ?? -1;
+    });
+
+    print("Operação recuperar: $logado");
+  }
+
+  void initState() {
+    super.initState();
+    isLogado();
+  }
 
   @override
   Widget build(BuildContext materialAppContext) => MaterialApp(
@@ -155,7 +170,7 @@ class ShowNull extends StatelessWidget {
 
   _recuperaReceita() async {
     var uri = Uri.parse(
-        "https://api.spoonacular.com/recipes/random/?apiKey=$spoon_Key2&instructionsRequired=true&number=5");
+        "https://api.spoonacular.com/recipes/random/?apiKey=c757f25b6b004ac09faef6bba5c1d00a&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -315,7 +330,6 @@ class ShowNull extends StatelessWidget {
     return vasco(context);
   }
 
-  void timeOut() {}
 }
 
 Widget _title(BuildContext context, Receitas receita) {
@@ -919,36 +933,27 @@ class DynamicWidget extends StatelessWidget {
   }
 }
 
-class ShowLogin extends StatelessWidget {
+class ShowLogin extends StatefulWidget {
+  @override
+  _ShowLogin createState() => _ShowLogin();
+}
 
-  int logado = -1;
+class _ShowLogin extends State<ShowLogin>{
+
 
   @override
   Widget build(BuildContext context) {
-    print("Logado $logado");
-    if (logado != -1) {
-      return DadosConta();
-    } else {
-      return Cadastro();
-    }
+      print("Logado: ${logado}");
+      if (logado != -1 || logado == null) {
+        return DadosConta();
+      } else {
+        return Cadastro();
+      }
   }
 
-  _salvarDados() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(
-        "isLogged", 1); // a chave será usada para recuperar dados
-    print("Operação salvar: 1");
-  }
-
-  _recuperarDados() async {
+  /*_recuperarDados() async {
     final prefs = await SharedPreferences.getInstance();
     logado = prefs.getInt("isLogged") ?? -1;
     print("Operação recuperar: $logado");
-  }
-
-  _removerDados() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove("isLogged");
-    print("Operação remover");
-  }
+  }*/
 }

@@ -6,6 +6,7 @@ import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Menu.dart';
 import 'Login.dart';
+import 'DAO.dart';
 
 
 class Cadastro extends StatefulWidget {
@@ -20,6 +21,9 @@ class _Cadastro extends State<Cadastro> {
   bool _showPassword = false;
   bool _showConfirmPassword = false;
   String _errorMessage = "";
+  int idUsuario = 0;
+
+  DAO dao = new DAO();
 
   TextEditingController _textEditingControllerNome = TextEditingController();
   TextEditingController _textEditingControllerEmail = TextEditingController();
@@ -167,11 +171,19 @@ class _Cadastro extends State<Cadastro> {
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.green),
                   minimumSize: MaterialStateProperty.all(Size(70, 40))),
-              onPressed: () => {
+              onPressed: () async => {
 
                 if (_textEditingControllerNome.text != "" && _textEditingControllerEmail.text != "" && _textEditingControllerSenha.text != "" && _textEditingControllerConfirmSenha.text != "") {
                   if (_textEditingControllerSenha.text == _textEditingControllerConfirmSenha.text && EmailValidator.validate(_textEditingControllerEmail.text, true))
                     {
+                      // Salvar usuário no banco de dados
+                      idUsuario = await dao.salvarDadosUsuario(_textEditingControllerNome.text, _textEditingControllerEmail.text, _textEditingControllerSenha.text),
+                      // Salvar ID do usuário criado no shared preferences e logar usuário
+                      await _salvarDados(idUsuario),
+                      // Mostrar todos os usuários criados no banco até o momento
+                      await dao.listarUsuarios(),
+
+                      // Redirecionar para tela de início
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => MyApp()),
@@ -203,12 +215,11 @@ class _Cadastro extends State<Cadastro> {
       ),
     );
   }
-  _salvarDados() async {
+  _salvarDados(int id) async {
     final prefs = await SharedPreferences.getInstance();
-    int logado = -1;
     await prefs.setInt(
-        "isLogged", logado); // a chave será usada para recuperar dados
-    print("Operação salvar: $logado");
+        "isLogged", id); // a chave será usada para recuperar dados
+    print("Operação salvar: ${id}");
   }
 
   void validateEmail(String val) {

@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Menu.dart';
 
 class DadosConta extends StatefulWidget {
   @override
@@ -205,7 +207,7 @@ class _DadosConta extends State<DadosConta> {
             ),
 
             Container(
-              margin: EdgeInsets.only(left: 32, top: 50, right: 32, bottom: 50),
+              margin: EdgeInsets.only(left: 32, top: 30, right: 32, bottom: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -261,15 +263,36 @@ class _DadosConta extends State<DadosConta> {
                          // TODO: Verificar o que tá alterando para validar se pode ou não ter uma ação ao apertar Edit
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
+            ),
+
+            Container (
+              margin: EdgeInsets.only(bottom: 50),
+              child: IconButton(
+                  icon: Icon(Icons.logout, size: 40, color: Colors.blue),
+                  onPressed: () {
+                    _removerDados();
+                    // Redirecionar para tela de início
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyApp()),
+                    );
+                  }),
             ),
           ],
         ),
       ),
     );
   }
+
+  _removerDados() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("isLogged");
+    print("Operação remover");
+  }
+
   void validateEmail(String val) {
     if(val.isEmpty){
       setState(() {

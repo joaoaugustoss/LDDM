@@ -6,7 +6,7 @@ import 'Receita.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '/auth/secure.dart';
+//import '/auth/secure.dart';
 
 class ResultadosBusca extends StatefulWidget {
   String valor;
@@ -38,7 +38,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=$spoon_Key2&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=c757f25b6b004ac09faef6bba5c1d00a&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -54,7 +54,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key2");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=c757f25b6b004ac09faef6bba5c1d00a");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -76,7 +76,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _ingredientReceita() async {
     String ingredient = fromList();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=$spoon_Key2&ingredients=$ingredient&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=c757f25b6b004ac09faef6bba5c1d00a&ingredients=$ingredient&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -92,7 +92,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=$spoon_Key2");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=c757f25b6b004ac09faef6bba5c1d00a");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
