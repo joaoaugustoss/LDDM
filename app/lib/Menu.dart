@@ -921,11 +921,12 @@ class DynamicWidget extends StatelessWidget {
 
 class ShowLogin extends StatelessWidget {
 
-  String logado = "null";
+  int logado = -1;
 
   @override
   Widget build(BuildContext context) {
-    if (logado != "null") {
+    print("Logado $logado");
+    if (logado != -1) {
       return DadosConta();
     } else {
       return Cadastro();
@@ -934,14 +935,14 @@ class ShowLogin extends StatelessWidget {
 
   _salvarDados() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        "isLogged", logado); // a chave será usada para recuperar dados
-    print("Operação salvar: $logado");
+    await prefs.setInt(
+        "isLogged", 1); // a chave será usada para recuperar dados
+    print("Operação salvar: 1");
   }
 
   _recuperarDados() async {
     final prefs = await SharedPreferences.getInstance();
-    logado = prefs.getString("isLogged") ?? "null";
+    logado = prefs.getInt("isLogged") ?? -1;
     print("Operação recuperar: $logado");
   }
 

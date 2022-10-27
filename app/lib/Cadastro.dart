@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Menu.dart';
@@ -118,7 +119,7 @@ class _Cadastro extends State<Cadastro> {
             ),
 
             Container (
-              margin: EdgeInsets.only(left: 32, top: 30, right: 32),
+              margin: EdgeInsets.only(left: 32, top: 30, right: 32, bottom:50),
               child: TextFormField(
                 controller: _textEditingControllerConfirmSenha,
                 keyboardType: TextInputType.text,
@@ -162,7 +163,7 @@ class _Cadastro extends State<Cadastro> {
                       MaterialStateProperty.all<Color>(Colors.green),
                   minimumSize: MaterialStateProperty.all(Size(70, 40))),
               onPressed: () => {
-                //if (ingredientes.length > 0)
+                //if (id != -1)
                 //{
                 Navigator.push(
                   context,
@@ -193,5 +194,12 @@ class _Cadastro extends State<Cadastro> {
         ),
       ),
     );
+  }
+  _salvarDados() async {
+    final prefs = await SharedPreferences.getInstance();
+    int logado = -1;
+    await prefs.setInt(
+        "isLogged", logado); // a chave será usada para recuperar dados
+    print("Operação salvar: $logado");
   }
 }
