@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:email_validator/email_validator.dart';
+import 'DAO.dart';
+import 'Menu.dart';
+import 'Usuario.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class Login extends StatefulWidget {
   @override
@@ -10,9 +17,14 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
   bool _showPassword = false;
+  DAO dao = new DAO();
+  Usuario userFromBD = new Usuario(-1, "", "", "");
+  String _errorMessage = "";
   final NavigationDrawerState state = NavigationDrawerState();
   TextEditingController _textEditingControllerEmail = TextEditingController();
   TextEditingController _textEditingControllerSenha = TextEditingController();
+  var bytesToHash;
+  var converted;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +55,7 @@ class _Login extends State<Login> {
                 ],
               ),
             ),
+
             Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
@@ -53,14 +66,12 @@ class _Login extends State<Login> {
                   hintText: 'Enter your e-mail',
                   labelText: 'E-mail',
                 ),
-                validator: (value) {
-                  if (value == "") {
-                    return 'Please enter valid e-mail';
-                  }
-                  return null;
+                onChanged: (val) {
+                  validateEmail(val);
                 },
               ),
             ),
+
             Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
@@ -83,14 +94,17 @@ class _Login extends State<Login> {
                       }),
                 ),
                 obscureText: _showPassword == false ? true : false,
-                validator: (value) {
-                  if (value == "") {
-                    return 'Please enter valid password';
-                  }
-                  return null;
-                },
               ),
             ),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Text(
+                _errorMessage,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+
             Container(
                 margin: EdgeInsets.only(left: 32, top: 30, right: 32),
                 child: Row(
@@ -106,17 +120,45 @@ class _Login extends State<Login> {
                                   color: Color.fromARGB(250, 250, 250, 250)))),
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                           minimumSize: MaterialStateProperty.all(Size(70, 40))),
-                      onPressed: () => {
-                        //if (ingredientes.length > 0)
-                        //{
-                        /*
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
-                ),*/
-                        // },
+                      onPressed: () async =>
+                      {
+                        if (_textEditingControllerEmail.text != "" &&
+                            _textEditingControllerSenha.text != "" &&
+                            EmailValidator.validate(
+                                _textEditingControllerEmail.text, true)) {
+                          userFromBD = await dao.listarUnicoUsuario(
+                              _textEditingControllerEmail.text),
+
+                          if(userFromBD.getID() != -1) {
+                            // CRIPTOGRAFIA DA SENHA:
+                            bytesToHash = utf8.encode(
+                                _textEditingControllerSenha.text),
+                            converted = md5.convert(bytesToHash),
+
+                            if (userFromBD.getSenha() == converted.toString()) {
+                              // Salvar ID do usuário logado no shared Preferences
+                              await _salvarDados(userFromBD.getID()),
+                              // Ir para página inicial
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MyApp()),
+                              ),
+                            } else
+                              {
+                                setState(() {
+                                  _errorMessage = "Invalid email or password.";
+                                }),
+                              }
+                          } else
+                            {
+                              setState(() {
+                                _errorMessage = "Invalid email or password.";
+                              }),
+                            }
+                        }
                       },
                     ),
                   ],
@@ -125,5 +167,28 @@ class _Login extends State<Login> {
         ),
       ),
     );
+  }
+
+  _salvarDados(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(
+        "isLogged", id); // a chave será usada para recuperar dados
+    print("Operação salvar: ${id}");
+  }
+
+  void validateEmail(String val) {
+    if (val.isEmpty) {
+      setState(() {
+        _errorMessage = "Email can not be empty.";
+      });
+    } else if (!EmailValidator.validate(val, true)) {
+      setState(() {
+        _errorMessage = "Invalid Email Address.";
+      });
+    } else {
+      setState(() {
+        _errorMessage = "";
+      });
+    }
   }
 }

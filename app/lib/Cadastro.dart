@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'Menu.dart';
 import 'Login.dart';
 import 'DAO.dart';
-
+import 'Usuario.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -22,13 +22,22 @@ class _Cadastro extends State<Cadastro> {
   bool _showConfirmPassword = false;
   String _errorMessage = "";
   int idUsuario = 0;
+  Usuario userFromBD = new Usuario(-1, "", "", "");
 
   DAO dao = new DAO();
 
   TextEditingController _textEditingControllerNome = TextEditingController();
   TextEditingController _textEditingControllerEmail = TextEditingController();
   TextEditingController _textEditingControllerSenha = TextEditingController();
-  TextEditingController _textEditingControllerConfirmSenha = TextEditingController();
+  TextEditingController _textEditingControllerConfirmSenha =
+      TextEditingController();
+
+  _salvarDados(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(
+        "isLogged", id); // a chave será usada para recuperar dados
+    print("Operação salvar: ${id}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +68,7 @@ class _Cadastro extends State<Cadastro> {
                 ],
               ),
             ),
-
-            Container (
+            Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerNome,
@@ -78,7 +86,7 @@ class _Cadastro extends State<Cadastro> {
                 },
               ),
             ),
-            Container (
+            Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerEmail,
@@ -88,13 +96,12 @@ class _Cadastro extends State<Cadastro> {
                   hintText: 'Enter your e-mail for login',
                   labelText: 'E-mail',
                 ),
-                onChanged: (val){
+                onChanged: (val) {
                   validateEmail(val);
                 },
               ),
             ),
-
-            Container (
+            Container(
               margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: TextFormField(
                 controller: _textEditingControllerSenha,
@@ -104,15 +111,18 @@ class _Cadastro extends State<Cadastro> {
                   hintText: 'Enter your password',
                   labelText: 'Password',
                   suffixIcon: GestureDetector(
-                    child: Icon(_showPassword == false ? Icons.visibility_off : Icons.visibility, color: Colors.black38),
-                    onTap: () {
-                      setState(() {
-                        _showPassword = !_showPassword;
-                      });
-                    }
-                  ),
+                      child: Icon(
+                          _showPassword == false
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.black38),
+                      onTap: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      }),
                 ),
-                obscureText: _showPassword == false ? true: false,
+                obscureText: _showPassword == false ? true : false,
                 validator: (value) {
                   if (value == "") {
                     return 'Please enter valid password';
@@ -121,9 +131,8 @@ class _Cadastro extends State<Cadastro> {
                 },
               ),
             ),
-
-            Container (
-              margin: EdgeInsets.only(left: 32, top: 30, right: 32, bottom:50),
+            Container(
+              margin: EdgeInsets.only(left: 32, top: 30, right: 32, bottom: 50),
               child: TextFormField(
                 controller: _textEditingControllerConfirmSenha,
                 keyboardType: TextInputType.text,
@@ -141,10 +150,9 @@ class _Cadastro extends State<Cadastro> {
                         setState(() {
                           _showConfirmPassword = !_showConfirmPassword;
                         });
-                      }
-                  ),
+                      }),
                 ),
-                obscureText: _showConfirmPassword == false ? true: false,
+                obscureText: _showConfirmPassword == false ? true : false,
                 validator: (value) {
                   if (value == "") {
                     return 'Please enter valid password';
@@ -156,7 +164,10 @@ class _Cadastro extends State<Cadastro> {
 
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
-              child: Text(_errorMessage, style: TextStyle(color: Colors.red),),
+              child: Text(
+                _errorMessage,
+                style: TextStyle(color: Colors.red),
+              ),
             ),
 
             ElevatedButton(
@@ -172,26 +183,48 @@ class _Cadastro extends State<Cadastro> {
                       MaterialStateProperty.all<Color>(Colors.green),
                   minimumSize: MaterialStateProperty.all(Size(70, 40))),
               onPressed: () async => {
+                if (_textEditingControllerNome.text != "" &&
+                    _textEditingControllerEmail.text != "" &&
+                    _textEditingControllerSenha.text != "" &&
+                    _textEditingControllerConfirmSenha.text != "")
+                  {
+                    if (_textEditingControllerSenha.text ==
+                            _textEditingControllerConfirmSenha.text &&
+                        EmailValidator.validate(
+                            _textEditingControllerEmail.text, true))
+                      {
+                        userFromBD = await dao.listarUnicoUsuario(
+                          _textEditingControllerEmail.text),
+                        if ( userFromBD.getID() == -1)
+                          {
+                            // Salvar usuário no banco de dados
+                            idUsuario = await dao.salvarDadosUsuario(
+                                _textEditingControllerNome.text,
+                                _textEditingControllerEmail.text,
+                                _textEditingControllerSenha.text),
+                            // Salvar ID do usuário criado no shared preferences e logar usuário
+                            await _salvarDados(idUsuario),
+                            // Mostrar todos os usuários criados no banco até o momento
+                            await dao.listarUsuarios(),
 
-                if (_textEditingControllerNome.text != "" && _textEditingControllerEmail.text != "" && _textEditingControllerSenha.text != "" && _textEditingControllerConfirmSenha.text != "") {
-                  if (_textEditingControllerSenha.text == _textEditingControllerConfirmSenha.text && EmailValidator.validate(_textEditingControllerEmail.text, true))
-                    {
-                      // Salvar usuário no banco de dados
-                      idUsuario = await dao.salvarDadosUsuario(_textEditingControllerNome.text, _textEditingControllerEmail.text, _textEditingControllerSenha.text),
-                      // Salvar ID do usuário criado no shared preferences e logar usuário
-                      await _salvarDados(idUsuario),
-                      // Mostrar todos os usuários criados no banco até o momento
-                      await dao.listarUsuarios(),
-
-                      // Redirecionar para tela de início
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                      ),
-                    }
-                }
+                            // Redirecionar para tela de início
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp()),
+                            ),
+                          }
+                        else
+                          {
+                            print("Entrei no error message"),
+                            setState(() {
+                              _errorMessage = "Email already exists.";
+                            }),
+                          }
+                      }
+                  }
               },
             ),
+
 
             InkWell(
               child: Container(
@@ -215,23 +248,17 @@ class _Cadastro extends State<Cadastro> {
       ),
     );
   }
-  _salvarDados(int id) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(
-        "isLogged", id); // a chave será usada para recuperar dados
-    print("Operação salvar: ${id}");
-  }
 
   void validateEmail(String val) {
-    if(val.isEmpty){
+    if (val.isEmpty) {
       setState(() {
         _errorMessage = "Email can not be empty.";
       });
-    }else if(!EmailValidator.validate(val, true)){
+    } else if (!EmailValidator.validate(val, true)) {
       setState(() {
         _errorMessage = "Invalid Email Address.";
       });
-    }else{
+    } else {
       setState(() {
         _errorMessage = "";
       });

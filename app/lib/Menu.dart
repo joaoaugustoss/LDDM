@@ -1,3 +1,4 @@
+import 'package:app/auth/secure.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:navigation_drawer_menu/navigation_drawer.dart';
@@ -170,7 +171,7 @@ class ShowNull extends StatelessWidget {
 
   _recuperaReceita() async {
     var uri = Uri.parse(
-        "https://api.spoonacular.com/recipes/random/?apiKey=c757f25b6b004ac09faef6bba5c1d00a&instructionsRequired=true&number=5");
+        "https://api.spoonacular.com/recipes/random/?apiKey=${spoon_Key1}&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -945,7 +946,7 @@ class _ShowLogin extends State<ShowLogin>{
   Widget build(BuildContext context) {
       print("Logado: ${logado}");
       if (logado != -1 || logado == null) {
-        return DadosConta();
+        return DadosConta(logado: logado);
       } else {
         return Cadastro();
       }
