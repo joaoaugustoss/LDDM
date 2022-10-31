@@ -39,7 +39,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=${spoon_Key1}&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=${spoon_Key5}&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -48,14 +48,18 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     Receitas receitinha;
     int size = json.decode(response.body)["results"].length;
     List<int> ids = [];
+    ids.clear();
 
     for(int i = 0; i < size; i++){
       receita = json.decode(response.body)["results"][i];
       ids.add(receita["id"]);
+      print(ids[i]);
     }
+    
+    print("SIZE $size");
 
-    for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key1}");
+    for (int i = 0; i < size; i++) {
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key5}");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -77,7 +81,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _ingredientReceita() async {
     String ingredient = fromList();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=${spoon_Key1}&ingredients=$ingredient&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=${spoon_Key5}&ingredients=$ingredient&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -93,7 +97,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key1}");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key5}");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -137,9 +141,6 @@ class _ResultadosBusca extends State<ResultadosBusca> {
       if(line[i] == '<'){ // é testado para verificar se o contador i ainda está dentro das tags
         i++;
         while(line[i] != '>') i++; //ao encontrar o sinal de fechamento das tags o laço de repetição é encerrado
-      } else if(line[i] == '&'){ //mesmo tratamento de cima mas para outras exceções presentes em alguns outros arquivos
-        i++;
-        while(line[i] != ';') i++;
       } else { //o que estiver fora das tags é concatenado a String resp a ser retornada
         resp += line[i];
       }

@@ -171,7 +171,7 @@ class ShowNull extends StatelessWidget {
 
   _recuperaReceita() async {
     var uri = Uri.parse(
-        "https://api.spoonacular.com/recipes/random/?apiKey=${spoon_Key1}&instructionsRequired=true&number=5");
+        "https://api.spoonacular.com/recipes/random/?apiKey=${spoon_Key5}&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -209,10 +209,6 @@ class ShowNull extends StatelessWidget {
         i++;
         while (line[i] != '>')
           i++; //ao encontrar o sinal de fechamento das tags o laço de repetição é encerrado
-      } else if (line[i] == '&') {
-        //mesmo tratamento de cima mas para outras exceções presentes em alguns outros arquivos
-        i++;
-        while (line[i] != ';') i++;
       } else {
         //o que estiver fora das tags é concatenado a String resp a ser retornada
         resp += line[i];
