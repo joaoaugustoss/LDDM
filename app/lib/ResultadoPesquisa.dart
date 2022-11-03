@@ -36,6 +36,12 @@ class _ResultadosBusca extends State<ResultadosBusca> {
   int code = 200;
   final NavigationDrawerState state = NavigationDrawerState();
   List<Receitas> receitas = [];
+  Future? _future;
+
+  void initState() {
+    _future = ingredientes.isEmpty ? _recuperaReceita() : _ingredientReceita();
+    super.initState();
+  }
 
   _recuperaReceita() async {
     String type = getType();
@@ -168,12 +174,14 @@ class _ResultadosBusca extends State<ResultadosBusca> {
         resp += ",+";
       }
     }
+    ingredientes.clear();
     return resp;
   }
 
   FutureBuilder vasco(BuildContext context) {
     return FutureBuilder(
-        future: ingredientes.isEmpty ? _recuperaReceita() : _ingredientReceita(),
+        //future: ingredientes.isEmpty ? _recuperaReceita() : _ingredientReceita(),
+        future: _future,
         builder: (context, AsyncSnapshot snapshot) {
           if (code != 200) {
             print("da colina");
