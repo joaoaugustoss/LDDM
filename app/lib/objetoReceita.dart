@@ -46,4 +46,12 @@ class Receitas {
     this.vegan = vegan;
     this.vegetarian = vegetarian;
   }
+
+  int getID(){
+    return this.id;
+  }
+
+  List getComentarios(){
+    return this.listaComentarios;
+  }
 }

@@ -179,8 +179,6 @@ class ShowNull extends StatelessWidget {
     Receitas receitinha;
     int size = json.decode(response.body)["recipes"].length; //list tags
     for (int i = 0; i < size; i++) {
-      // receita["vegetarian"] == true ? tags.add("vegetarian") : nothing;
-      //print(size);
       receita = json.decode(response.body)["recipes"][i];
       receitinha = Receitas(
           receita["id"],

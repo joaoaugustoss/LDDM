@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'Usuario.dart';
+import 'Comentario.dart';
 
 class DAO {
 
@@ -12,11 +13,17 @@ class DAO {
 
     var retorno = await openDatabase(
         localBD,
-        version: 1,
+        version: 3,
         onCreate: (db, dbVersaoRecente) {
-          String sql = "CREATE TABLE usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, email VARCHAR, senha VARCHAR); CREATE TABLE comentarios (id INTEGER PRIMARY KEY AUTOINCREMENT, comentario VARCHAR, idreceita INTEGER, idsuario INTEGER, FOREIGN KEY(idsuario) REFERENCES usuarios(id));";
+          String sql = "CREATE TABLE usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR, email VARCHAR, senha VARCHAR)";
           db.execute(sql);
-        }
+          String sql1 = "CREATE TABLE comentarios (id INTEGER PRIMARY KEY AUTOINCREMENT, comentario VARCHAR, nota REAL, nomeusuario VARCHAR, idreceita INTEGER, idusuario INTEGER, FOREIGN KEY(idusuario) REFERENCES usuarios(id))";
+          // , FOREIGN KEY(idusuario) REFERENCES usuarios(id);
+          db.execute(sql1); // tirei o fone rapidao
+        },
+        onConfigure: (db) async {
+          await db.execute('PRAGMA foreign_keys = ON');
+        },
     );
 
     print("Aberto " + retorno.isOpen.toString());
@@ -43,14 +50,17 @@ class DAO {
     return id;
   }
 
-  Future<int> salvarDadosComentario(String comentario, int IDReceita, int IDUsuario) async {
+  Future<int> salvarDadosComentario(String comentario, int IDReceita, int IDUsuario, String nomeUsuario, double nota) async {
     Database db = await _recuperarBancoDados();
     Map<String, dynamic> dadosComentario  = {
       "comentario" : comentario,
+      "nota" : nota,
+      "nomeusuario" : nomeUsuario,
       "idreceita": IDReceita,
       "idusuario" : IDUsuario,
     };
 
+    print("AAAAAAAAA");
     int id = await db.insert("comentarios", dadosComentario);
     print("IDComentario: ${id}");
 
@@ -122,9 +132,32 @@ class DAO {
     List comentarios = await db.rawQuery(sql);
 
     for(var elm in comentarios) {
-      print(" id: ${elm["id"]}   comentario: ${elm["comentario"]}   IDReceita: ${elm["idreceita"]}   IDUsuario: ${elm["idusuario"]}");
+      print(" id: ${elm["id"]}   comentario: ${elm["comentario"]}   IDReceita: ${elm["idreceita"]} NomeUsuario: ${elm["nomeusuario"]} Nota: ${elm["nota"]}   IDUsuario: ${elm["idusuario"]}");
     }
     await db.close();
+  } // to sem fone dnv - ok
+
+  Future<List<dynamic>>listarComentariosByReceita(int idReceita) async {
+    Database db = await _recuperarBancoDados();
+    List comentariosFinal = [];
+    List comentarios = await db.query(
+        "comentarios",
+        columns: ["id", "comentario", "nota" , "nomeusuario", "idreceita", "idusuario"],
+        where: "idreceita = ?",
+        whereArgs: [idReceita]
+    );
+
+    for(var elem in comentarios) {
+      comentariosFinal.add(new Comentario(
+          elem["id"], elem["nomeusuario"], elem["comentario"], elem["nota"],
+        elem["idusuario"], elem["idreceita"]));
+    }
+
+    for(Comentario elem in comentariosFinal) {
+      print("Comentario = ${elem.toString()}");
+    }
+    await db.close();
+    return comentariosFinal;
   }
 
   updateUsuario(int id, String nome, String email, String senha) async {

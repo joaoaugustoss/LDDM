@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:navigation_drawer_menu/navigation_drawer_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'objetoReceita.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'Usuario.dart';
+import 'DAO.dart';
 
 class Receita extends StatefulWidget {
   Receitas receita;
@@ -15,9 +18,52 @@ class Receita extends StatefulWidget {
 }
 
 class _Receita extends State<Receita> {
+  late Receita receita;
   final NavigationDrawerState state = NavigationDrawerState();
   double value = 3.5;
+  int logado = -1;
+  String comentario = "";
   final TextEditingController _textEditingController = TextEditingController();
+  final controller = ScrollController();
+  DAO dao = new DAO();
+  Usuario usr = new Usuario(-1, "", "", "");
+  String _errorMessage = "";
+  List<dynamic> comentarios = [];
+  List<String> items = List.generate(15, (index) => 'Item ${index + 1}');
+
+  void initState() {
+    super.initState();
+    isLogado();
+    fetch();
+    /*controller.addListener(() {
+      if(controller.position.maxScrollExtent == controller.offset){
+        fetch();
+      }
+    });*/
+  }
+
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Future fetch() async {
+    print(receita.receita.id);
+    final List teste =
+        dao.listarComentariosByReceita(receita.receita.id) as List;
+    setState(() {
+      comentarios.addAll(teste);
+    });
+  }
+
+  // func fodase
+  //         i = 5 / tamanho = 10
+  //    for (i = tamanho)
+  //        comentariospart.add(comentarios[i])
+  //
+  //    manter o I
+  //    tamanho += 5 se tamanhoNovo < comentarios.length : comentarios.length
+  //
 
   @override
   Widget build(BuildContext context) {
@@ -259,28 +305,6 @@ class _Receita extends State<Receita> {
                 padding: const EdgeInsets.only(
                     left: 32, top: 15, right: 32, bottom: 10),
                 child: TextField(
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  minLines: 1,
-                  maxLines: 2,
-                  decoration:
-                      const InputDecoration(hintText: "Write your name: "),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                  onSubmitted: null,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(50),
-
-                    /// here char limit is 50
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 32, top: 15, right: 32, bottom: 10),
-                child: TextField(
                   controller: _textEditingController,
 
                   /// controlador do nosso campo de texto
@@ -339,6 +363,13 @@ class _Receita extends State<Receita> {
                 ),
               ),
               Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: Text(
+                  _errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.only(bottom: 32),
                 child: ElevatedButton(
                   style: ButtonStyle(
@@ -346,7 +377,37 @@ class _Receita extends State<Receita> {
                           const Color.fromARGB(250, 8, 110, 167)),
                       minimumSize:
                           MaterialStateProperty.all(const Size(70, 40))),
-                  onPressed: null,
+                  onPressed: () async => {
+                    // Logado
+                    if (logado != -1)
+                      {
+                        // Escrito algo
+                        if (_textEditingController.text != "")
+                          {
+                            comentario = _textEditingController.text,
+                            usr = await dao.listarUnicoUsuarioByID(logado),
+                            await dao.salvarDadosComentario(
+                                comentario,
+                                widget.receita.getID(),
+                                logado,
+                                usr.getNome(),
+                                value),
+                            print("OPA :)"),
+                          }
+                        else
+                          {
+                            setState(() {
+                              _errorMessage = "Comment can not be empty.";
+                            }),
+                          }
+                      }
+                    else
+                      {
+                        setState(() {
+                          _errorMessage = "You must be logged in to comment.";
+                        }),
+                      }
+                  },
                   child: Text("Comment",
                       style: GoogleFonts.roboto(
                           textStyle: const TextStyle(
@@ -357,9 +418,31 @@ class _Receita extends State<Receita> {
                 ),
               ),
             ])),
+
+            // Listar Comentários
+            //Container(child: Text("FOO", style: TextStyle(color: Colors.black)))
+            /*Container(
+                child: ListView.builder(
+                    //controller: controller,
+                    padding: EdgeInsets.all(8),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return ListTile(title: Text(item));
+                    })),*/
           ],
         ),
       ),
     );
+  }
+
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  void isLogado() async {
+    logado = await _prefs.then((SharedPreferences prefs) {
+      return prefs.getInt('isLogged') ?? -1;
+    });
+
+    print("Operação recuperar: $logado");
   }
 }
