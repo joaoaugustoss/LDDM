@@ -38,6 +38,8 @@
   É um aplicativo mobile utilizando o framework Flutter para a matéria de Laboratório de Desenvolvimento de Dispositivos Móveis do curso de Ciência da Computação da Pontifícia Universidade Católica de Minas Gerais, orientado pelo professor <a href="https://github.com/ilorivero">Ilo Amy Saldanha Rivero</a>. Separado em quatro sprints onde é trabalhado o front-end, back-end e integração com API externa.
 
 Este aplicativo irá auxiliar em receitas culinárias, onde o usuário informa quais ingredientes tem em casa e o aplicativo mostra possíveis receitas com os ingredientes disponíveis - é daí que vem o nome Resquitem. Tem como um dos objetivos reduzir o número de alimentos desperdiçados por falta de o que fazer com eles.  
+  
+O público alvo é qualquer pessoa que queira cozinhar, se for menor de idade, este usuário seria supervisionado por seu responsável.
 </p>
 
 ## :receipt: Funcionalidades 
