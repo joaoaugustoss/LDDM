@@ -48,7 +48,7 @@ class _Receita extends State<Receita> {
 
   void convertFutureListToList() async {
     Future<List> _futureOfList = comentarios;
-    List list = await _futureOfList ;
+    List list = await _futureOfList;
     widget.receita.setComentarios(list);
     print(widget.receita.listaComentarios.length);
     teste = list;
@@ -418,16 +418,23 @@ class _Receita extends State<Receita> {
                     shrinkWrap: true,
                     itemCount: widget.receita.listaComentarios.length,
                     itemBuilder: (context, index) {
-                      return Wrap(
-                        children: [
-                          /*Text("\u2022 ",
+                      if (widget.receita.listaComentarios.length > 0) {
+                        return Wrap(
+                          children: [
+                            /*Text("\u2022 ",
                               style:
                                   TextStyle(fontSize: 30, color: Colors.black)),*/
-                          Text("\u2022 ${widget.receita.listaComentarios[index]}",
-                              style:
-                              TextStyle(fontSize: 20, color: Colors.black)),
-                        ],
-                      );
+                            Text(
+                                "\u2022 ${widget.receita.listaComentarios[index].getComentario()}",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black)),
+                          ],
+                        );
+                      } else {
+                        return Text("\u2022 PORRA",
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black));
+                      }
                     },
                   ),
                 ],
@@ -448,7 +455,6 @@ class _Receita extends State<Receita> {
         ),
       ),
     );
-
   }
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
