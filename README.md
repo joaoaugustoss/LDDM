@@ -13,52 +13,48 @@
 
 ### Tópicos 
 
-:small_blue_diamond: [Descrição do projeto](#descrição-do-projeto)
+:small_blue_diamond: [Descrição do projeto](#pencil2-descrição-do-projeto)
 
-:small_blue_diamond: [Funcionalidades](#funcionalidades)
+:small_blue_diamond: [Funcionalidades](#receipt-funcionalidades)
 
-:small_blue_diamond: [Telas da Aplicação](#telas-da-aplicação)
+:small_blue_diamond: [Telas da Aplicação](#iphone-telas-da-aplicação)
 
-:small_blue_diamond: [Pré-requisitos](#pré-requisitos)
+:small_blue_diamond: [Pré-requisitos](#hammer_and_wrench-pré-requisitos)
 
-:small_blue_diamond: [Como rodar a aplicação](#como-rodar-a-aplicação)
+:small_blue_diamond: [Como rodar a aplicação](#arrow_forward-como-rodar-a-aplicação)
 
-:small_blue_diamond: [Casos de Uso](#casos-de-uso)
+:small_blue_diamond: [API Spoonacular](#link-api-spoonacular)
 
-:small_blue_diamond: [API Spoonacular](#api-spoonacular)
+:small_blue_diamond: [Banco de dados](#floppy_disk-banco-de-dados)
 
-:small_blue_diamond: [Banco de dados](#banco-de-dados)
+:small_blue_diamond: [Dependências e libs utilizadas](#books-dependências-e-libs-utilizadas)
 
-:small_blue_diamond: [Dependências e libs utilizadas](#dependências-e-libs-utilizadas)
-
-:small_blue_diamond: [Licença](#licença)
+:small_blue_diamond: [Licença](#lock-licença)
 
 
 ## :pencil2: Descrição do projeto 
 
 <p align="justify">
-  É um aplicativo para a matéria de Laboratório de Desenvolvimento de Dispositivos Móveis. Separado em quatro sprints onde é trabalhado o front-end, back-end e integração com API externa.
+  É um aplicativo mobile utilizando o framework Flutter para a matéria de Laboratório de Desenvolvimento de Dispositivos Móveis do curso de Ciência da Computação da Pontifícia Universidade Católica de Minas Gerais, orientado pelo professor <a href="https://github.com/ilorivero">Ilo Amy Saldanha Rivero</a>. Separado em quatro sprints onde é trabalhado o front-end, back-end e integração com API externa.
 
 Este aplicativo irá auxiliar em receitas culinárias, onde o usuário informa quais ingredientes tem em casa e o aplicativo mostra possíveis receitas com os ingredientes disponíveis - é daí que vem o nome Resquitem. Tem como um dos objetivos reduzir o número de alimentos desperdiçados por falta de o que fazer com eles.  
 </p>
 
 ## :receipt: Funcionalidades 
 
-:heavy_check_mark: Cadastro, login e alteração de dados da conta do usuário
+:heavy_check_mark: Cadastro, login, remoção e alteração de dados da conta do usuário
 
-:heavy_check_mark: Pesquisar por nome da receita ou por filtros como doce, salgado ou qual seria a refeição do dia.  
+:heavy_check_mark: Pesquisar por nome da receita ou por filtros como lanche, sobremesa ou qual seria a refeição do dia.  
 
-:heavy_check_mark: Pesquisar por ingredientes disponíveis
+:heavy_check_mark: Pesquisar receita pelos ingredientes disponíveis
 
-:heavy_check_mark: Comentar receita informando, por exemplo, uma dica de modo de preparo
-
-
+:heavy_check_mark: Comentar e dar uma nota para a receita informando, por exemplo, uma dica de modo de preparo
 
 ## :iphone: Telas da Aplicação 
 
 
 
-## 🛠 Pré-requisitos
+## :hammer_and_wrench: Pré-requisitos
 
 - [AndroidStudio](https://developer.android.com/)
 - [Flutter](https://flutter.dev/)
@@ -79,24 +75,13 @@ git clone https://github.com/joaoaugustoss/LDDM.git
 
 **4° passo:** Para rodar o aplicativo no emulador ou no seu dispositivo, siga o passo a passo neste [site](https://developer.android.com/training/basics/firstapp/running-app?hl=pt-br#:~:text=No%20Android%20Studio%2C%20crie%20um,voc%C3%AA%20quer%20executar%20o%20app.).
 
-
-
-## :bulb: Casos de Uso
-
-- Cadastrar uma conta para poder comentar uma receita.
-- Fazer login em uma conta já criada.
-- Alterar os dados da conta já criada.
-- Pesquisar uma receita com ingredientes específicos.
-- Pesquisar uma receita pelo seu nome e filtros.
-- Comentar uma receita após já ter uma conta e nela estar logado.
-
 ## :link: API Spoonacular
 
 Para mostrar as receitas pesquisadas pelo usuário, utilizamos a API Spoonacular. Nela conseguimos buscar receitas pelo seu id, filtros, ingredientes e pelo seu nome, ou seja, o que é necessário para o funcionamento do nosso aplicativo. Para ter acesso a esta API acesse este [site](https://react-pdf.org/](https://spoonacular.com/food-api/console#Dashboard)) e crie sua conta para ter acesso a uma API Key.
 
 ## :floppy_disk: Banco de Dados 
 
-Para criar e armazenar as informações no banco de dados utilizamos o [SQLite](https://pub.dev/packages/sqflite).
+Para criar e armazenar as informações no banco de dados utilizamos o [sqflite](https://pub.dev/packages/sqflite).
 
 No banco de dados é armazenado os usuários cadastrados no aplicativo. A primary key é o id. 
 
@@ -115,21 +100,21 @@ A tabela para esta entidade e suas colunas com seus respecitivos dados são:
 
 |id (INTEGER)|nome (VARCHAR)|email (VARCHAR)|senha (VARCHAR)|
 | -------- |-------- |-------- |-------- |
-|1|Roberta Vasconcelos Silva|roberta@gmail.com||
-|2|Jorge Ribeiro Souza|jorge@hotmail.com||
+|1|Roberta Vasconcelos Silva|roberta@gmail.com|81dc9bdb52d04dc20036dbd8313ed055|
+|2|Jorge Ribeiro Souza|jorge@hotmail.com|202cb962ac59075b964b07152d234b70|
 
 Também é armazenado no banco os comentários em cada receita adicionados pelo usuário logado. A Primary key é o id e o idusuario é uma Foreign key da tabela usuário. 
 
-É possível apenas inserir o comentário. Nesta tabela é armazenado o comentário escrito pelo usuário, o id da receita que veio da API Spoonacular em que foi feito o comentário e o id do usuário que comentou. 
+É possível apenas inserir o comentário com sua nota na receita. Nesta tabela é armazenado o comentário escrito pelo usuário, o id da receita que veio da API Spoonacular em que foi feito o comentário, a nota dada pelo usuário para aquela receita, o nome e o id do usuário que comentou. 
 
 A tabela com suas respectivas colunas e tipos segue abaixo:
 
 ### Comentários: 
 
-|id (INTEGER)|comentario (VARCHAR)|idreceita (INTEGER) |idusuario (INTEGER)|
-| -------- |-------- |-------- |-------- |
-|1|Esta receita ficou muito gostosa.|7589|1|
-|2|Adicionei raspas de limão e ficou maravilhoso!|325|2|
+|id (INTEGER)|comentario (VARCHAR)| nota (REAL)|nomeusuario (VARCHAR)|idreceita (INTEGER) |idusuario (INTEGER)|
+| -------- |-------- |-------- |-------- |-------- |-------- |
+|1|Esta receita ficou muito gostosa.|5.0|Roberta Vasconcelos Silva|7589|1|
+|2|Adicionei raspas de limão e ficou maravilhoso!|3.5|Jorge Ribeiro Souza|325|2|
 
 Para verificar se o usuário já está logado em sua conta é utilizado o [Shared Preferences](https://pub.dev/packages/shared_preferences). Se o id do usuário estiver guardado no Shared Preferences então o usuário está logado, caso contrário não. Assim é possível controlar as telas que irão aparecer caso esteja ou não logado. 
 
@@ -147,16 +132,7 @@ Para verificar se o usuário já está logado em sua conta é utilizado o [Share
 - [email_validator](https://pub.dev/packages/email_validator)
 - [sqflite](https://pub.dev/packages/sqflite)
 - [crypto](https://pub.dev/packages/crypto)
-
-
-## :exclamation: Resolvendo Problemas 
-
-Em [issues]() foram abertos alguns problemas gerados durante o desenvolvimento desse projeto e como foram resolvidos. 
-
-## :gear: Tarefas em aberto
-
-:memo: Sprint 4
-
+- [flutter_rating_bar](https://pub.dev/packages/flutter_rating_bar)
 
 ## :lock: Licença 
 
