@@ -51,7 +51,7 @@ class Receitas {
     return this.id;
   }
 
-  List getComentarios(){
-    return this.listaComentarios;
+  void setComentarios(var comentarios){
+    this.listaComentarios = comentarios;
   }
 }

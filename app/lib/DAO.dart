@@ -157,7 +157,7 @@ class DAO {
       print("Comentario = ${elem.toString()}");
     }
     await db.close();
-    return comentariosFinal;
+    return comentariosFinal.toList();
   }
 
   updateUsuario(int id, String nome, String email, String senha) async {

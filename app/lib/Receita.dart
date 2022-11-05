@@ -18,7 +18,6 @@ class Receita extends StatefulWidget {
 }
 
 class _Receita extends State<Receita> {
-  late Receita receita;
   final NavigationDrawerState state = NavigationDrawerState();
   double value = 3.5;
   int logado = -1;
@@ -28,32 +27,14 @@ class _Receita extends State<Receita> {
   DAO dao = new DAO();
   Usuario usr = new Usuario(-1, "", "", "");
   String _errorMessage = "";
-  List<dynamic> comentarios = [];
+  late Future<List<dynamic>> comentarios;
+  var teste;
   List<String> items = List.generate(15, (index) => 'Item ${index + 1}');
 
   void initState() {
     super.initState();
     isLogado();
-    fetch();
-    /*controller.addListener(() {
-      if(controller.position.maxScrollExtent == controller.offset){
-        fetch();
-      }
-    });*/
-  }
-
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  Future fetch() async {
-    print(receita.receita.id);
-    final List teste =
-        dao.listarComentariosByReceita(receita.receita.id) as List;
-    setState(() {
-      comentarios.addAll(teste);
-    });
+    comentarios = dao.listarComentariosByReceita(widget.receita.id);
   }
 
   // func fodase
@@ -65,8 +46,17 @@ class _Receita extends State<Receita> {
   //    tamanho += 5 se tamanhoNovo < comentarios.length : comentarios.length
   //
 
+  void convertFutureListToList() async {
+    Future<List> _futureOfList = comentarios;
+    List list = await _futureOfList ;
+    widget.receita.setComentarios(list);
+    print(widget.receita.listaComentarios.length);
+    teste = list;
+  }
+
   @override
   Widget build(BuildContext context) {
+    convertFutureListToList();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Resquitem"),
@@ -232,6 +222,7 @@ class _Receita extends State<Receita> {
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
+                    //itemCount: widget.receita.ingredientes.length,
                     itemCount: widget.receita.ingredientes.length,
                     itemBuilder: (context, index) {
                       return Wrap(
@@ -419,6 +410,29 @@ class _Receita extends State<Receita> {
               ),
             ])),
 
+            Container(
+              padding: EdgeInsets.only(left: 32, top: 10, bottom: 32),
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.receita.listaComentarios.length,
+                    itemBuilder: (context, index) {
+                      return Wrap(
+                        children: [
+                          /*Text("\u2022 ",
+                              style:
+                                  TextStyle(fontSize: 30, color: Colors.black)),*/
+                          Text("\u2022 ${widget.receita.listaComentarios[index]}",
+                              style:
+                              TextStyle(fontSize: 20, color: Colors.black)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
             // Listar Comentários
             //Container(child: Text("FOO", style: TextStyle(color: Colors.black)))
             /*Container(
@@ -434,6 +448,7 @@ class _Receita extends State<Receita> {
         ),
       ),
     );
+
   }
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
