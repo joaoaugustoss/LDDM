@@ -42,17 +42,31 @@ Este aplicativo irá auxiliar em receitas culinárias, onde o usuário informa q
 
 ## :receipt: Funcionalidades 
 
-:heavy_check_mark: Cadastro, login, remoção e alteração de dados da conta do usuário
+:heavy_check_mark: Cadastro, login, remoção e alteração de dados da conta do usuário.
 
 :heavy_check_mark: Pesquisar por nome da receita ou por filtros como lanche, sobremesa ou qual seria a refeição do dia.  
 
-:heavy_check_mark: Pesquisar receita pelos ingredientes disponíveis
+:heavy_check_mark: Pesquisar receita pelos ingredientes disponíveis.
 
-:heavy_check_mark: Comentar e dar uma nota para a receita informando, por exemplo, uma dica de modo de preparo
+:heavy_check_mark: Comentar e dar uma nota para a receita informando, por exemplo, uma dica de modo de preparo.
 
 ## :iphone: Telas da Aplicação 
 
+- Respectivamente há a tela inicial para entrar no aplicativo, tela que aparece quando está buscando as receitas da API, tela com algumas sugestões de receitas e a tela de menu:
 
+<img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/telaInicial.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/telaCarregando.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/receitasAleatorias.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/menu.PNG" width=200>
+
+- Respectivamente há a tela de pesquisa pelo nome da receita e filtros, tela de pesquisa pelos ingredientes, tela do resultado da pesquisa e tela quando não encontra a pesquisa procurada:
+
+<img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/pesquisaPorNomeEFiltros.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/pesquisaPorIngredientes.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/resultadosDaBusca.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/receitaNaoEncontrada.PNG" width=200>
+
+- Respectivamente há a tela de criação de uma conta de usuário, primeira parte da tela de alteração da conta, segunda parte da tela de alteração da conta e a tela de login com conta inexistente:
+
+<img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/criandoConta.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/dadosDaContaParte1.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/dadosDaContaParte2.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/LoginComContaNaoExistente.PNG" width=200>
+
+- Respectivamente há a primeira, segunda e terceira parte da tela de uma receita e a tela sobre o aplicativo:
+
+<img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/receitaParte1.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/receitaParte2.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/receitaParte3.PNG" width=200> <img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/telas/sobre.PNG" width=200>
 
 ## :hammer_and_wrench: Pré-requisitos
 
