@@ -7,6 +7,7 @@ import 'Receita.dart';
 import 'objetoReceita.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'DAO.dart';
 //import '/auth/secure.dart';
 
 class ResultadosBusca extends StatefulWidget {
@@ -37,6 +38,8 @@ class _ResultadosBusca extends State<ResultadosBusca> {
   final NavigationDrawerState state = NavigationDrawerState();
   List<Receitas> receitas = [];
   Future? _future;
+  DAO dao = new DAO();
+  var comentarios;
 
   void initState() {
     _future = ingredientes.isEmpty ? _recuperaReceita() : _ingredientReceita();
@@ -45,7 +48,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=${spoon_Key1}&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=${spoon_Key3}&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -65,7 +68,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     print("SIZE $size");
 
     for (int i = 0; i < size; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key1}");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key3}");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -75,7 +78,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
           receita["image"],
           receita["servings"],
           receita["aggregateLikes"],
-          ["comentarios"],
+          [],
           getIngredients(receita),
           removeTags(receita["instructions"]),
           receita["readyInMinutes"],
@@ -87,7 +90,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _ingredientReceita() async {
     String ingredient = fromList();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=${spoon_Key1}&ingredients=$ingredient&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=${spoon_Key3}&ingredients=$ingredient&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -103,7 +106,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key1}");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key3}");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -113,7 +116,9 @@ class _ResultadosBusca extends State<ResultadosBusca> {
           receita["image"],
           receita["servings"],
           receita["aggregateLikes"],
-          ["comentarios"],
+          [
+
+          ],
           getIngredients(receita),
           removeTags(receita["instructions"]),
           receita["readyInMinutes"],
@@ -130,7 +135,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     (widget.doce == true ? aux.add("dessert") : resp);
     (widget.cafeDaManha == true ? aux.add("breakfast") : resp);
     (widget.almoco == true ? aux.add("main course") : resp);
-    (widget.jantar == true ? aux.add("snack") : resp);
+    (widget.jantar == true ? aux.add("drink") : resp);
     for(int i = 0; i < aux.length; i++){
       resp += aux[i];
       if(i != aux.length-1) {
@@ -277,7 +282,9 @@ class _ResultadosBusca extends State<ResultadosBusca> {
           color: Colors.black,
         ),
       ),
-      onTap: () {
+      onTap: () async {
+        comentarios = await dao.listarComentariosByReceita(receita.getID());
+        receita.setComentarios(comentarios);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => Receita(receita: receita)));
       },

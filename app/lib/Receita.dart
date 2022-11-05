@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'objetoReceita.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'Usuario.dart';
 import 'DAO.dart';
 
@@ -27,36 +28,16 @@ class _Receita extends State<Receita> {
   DAO dao = new DAO();
   Usuario usr = new Usuario(-1, "", "", "");
   String _errorMessage = "";
-  late Future<List<dynamic>> comentarios;
-  var teste;
+  var comentarios;
   List<String> items = List.generate(15, (index) => 'Item ${index + 1}');
 
   void initState() {
     super.initState();
     isLogado();
-    comentarios = dao.listarComentariosByReceita(widget.receita.id);
-  }
-
-  // func fodase
-  //         i = 5 / tamanho = 10
-  //    for (i = tamanho)
-  //        comentariospart.add(comentarios[i])
-  //
-  //    manter o I
-  //    tamanho += 5 se tamanhoNovo < comentarios.length : comentarios.length
-  //
-
-  void convertFutureListToList() async {
-    Future<List> _futureOfList = comentarios;
-    List list = await _futureOfList;
-    widget.receita.setComentarios(list);
-    print(widget.receita.listaComentarios.length);
-    teste = list;
   }
 
   @override
   Widget build(BuildContext context) {
-    convertFutureListToList();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Resquitem"),
@@ -65,7 +46,7 @@ class _Receita extends State<Receita> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 32, top: 30),
+              margin: EdgeInsets.only(left: 32, top: 30, right: 32),
               child: Wrap(
                 //mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -384,6 +365,14 @@ class _Receita extends State<Receita> {
                                 usr.getNome(),
                                 value),
                             print("OPA :)"),
+                            comentarios = await dao.listarComentariosByReceita(
+                                widget.receita.getID()),
+                            widget.receita.setComentarios(comentarios),
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Receita(receita: widget.receita))),
                           }
                         else
                           {
@@ -411,7 +400,8 @@ class _Receita extends State<Receita> {
             ])),
 
             Container(
-              padding: EdgeInsets.only(left: 32, top: 10, bottom: 32),
+              padding:
+                  EdgeInsets.only(left: 32, top: 10, bottom: 32, right: 32),
               child: Column(
                 children: [
                   ListView.builder(
@@ -421,36 +411,80 @@ class _Receita extends State<Receita> {
                       if (widget.receita.listaComentarios.length > 0) {
                         return Wrap(
                           children: [
-                            /*Text("\u2022 ",
-                              style:
-                                  TextStyle(fontSize: 30, color: Colors.black)),*/
-                            Text(
-                                "\u2022 ${widget.receita.listaComentarios[index].getComentario()}",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black)),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 2,
+                                      color: Color.fromARGB(250, 8, 110, 167)),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                title: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(left: 5),
+                                        child: Text(
+                                          "${widget.receita.listaComentarios[index].getNomeUsuario()}",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(top: 5, bottom: 5),
+                                        child: RatingBar.builder(
+                                          initialRating: widget
+                                              .receita.listaComentarios[index]
+                                              .getNota(),
+                                          minRating: 1,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          itemSize: 25,
+                                          itemCount: 5,
+                                          itemPadding: EdgeInsets.symmetric(
+                                              horizontal: 4.0),
+                                          itemBuilder: (context, _) => Icon(
+                                            Icons.restaurant_menu,
+                                            color: Colors.yellow,
+                                          ),
+                                          unratedColor: const Color(0xffe7e8ea),
+                                          onRatingUpdate: (rating) {},
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                subtitle: Container(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: Text(
+                                      "${widget.receita.listaComentarios[index].getComentario()}",
+                                      style: TextStyle(
+                                          fontSize: 18, color: Colors.black)),
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       } else {
-                        return Text("\u2022 PORRA",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.black));
+                        print("ELSE");
+                        return Wrap(children: [
+                          Text("\u2022 PORRA",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black))
+                        ]);
                       }
                     },
                   ),
                 ],
               ),
             ),
-            // Listar Comentários
-            //Container(child: Text("FOO", style: TextStyle(color: Colors.black)))
-            /*Container(
-                child: ListView.builder(
-                    //controller: controller,
-                    padding: EdgeInsets.all(8),
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return ListTile(title: Text(item));
-                    })),*/
           ],
         ),
       ),

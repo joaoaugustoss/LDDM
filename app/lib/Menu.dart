@@ -171,7 +171,7 @@ class ShowNull extends StatelessWidget {
 
   _recuperaReceita() async {
     var uri = Uri.parse(
-        "https://api.spoonacular.com/recipes/random/?apiKey=${spoon_Key1}&instructionsRequired=true&number=5");
+        "https://api.spoonacular.com/recipes/random/?apiKey=${spoon_Key3}&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -391,7 +391,7 @@ class _EntradaCheckBoxState extends State<EntradaCheckBox> {
       child: Column(
         children: <Widget>[
           CheckboxListTile(
-              title: Text("Savory"),
+              title: Text("Snack"),
               value: salgado,
               onChanged: (bool? valor) {
                 setState(() {
@@ -399,7 +399,7 @@ class _EntradaCheckBoxState extends State<EntradaCheckBox> {
                 });
               }),
           CheckboxListTile(
-              title: Text("Sweet"),
+              title: Text("Dessert"),
               value: doce,
               onChanged: (bool? valor) {
                 setState(() {
@@ -415,7 +415,7 @@ class _EntradaCheckBoxState extends State<EntradaCheckBox> {
                 });
               }),
           CheckboxListTile(
-              title: Text("Lunch"),
+              title: Text("Main course"),
               value: almoco,
               onChanged: (bool? valor) {
                 setState(() {
@@ -423,7 +423,7 @@ class _EntradaCheckBoxState extends State<EntradaCheckBox> {
                 });
               }),
           CheckboxListTile(
-            title: Text("Dinner"),
+            title: Text("Drink"),
             value: jantar,
             onChanged: (bool? valor) {
               setState(() {
