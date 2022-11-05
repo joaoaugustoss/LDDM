@@ -48,7 +48,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _recuperaReceita() async {
     String type = getType();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=${spoon_Key3}&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/complexSearch?apiKey=${spoon_Key4}&query=${widget.valor}&type=$type&instructionsRequired=true&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -68,7 +68,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     print("SIZE $size");
 
     for (int i = 0; i < size; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key3}");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key4}");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
@@ -90,7 +90,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
 
   _ingredientReceita() async {
     String ingredient = fromList();
-    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=${spoon_Key3}&ingredients=$ingredient&number=5");
+    var uri = Uri.parse("https://api.spoonacular.com/recipes/findByIngredients?apiKey=${spoon_Key4}&ingredients=$ingredient&number=5");
     http.Response response;
     response = await http.get(uri);
     code = response.statusCode;
@@ -106,7 +106,7 @@ class _ResultadosBusca extends State<ResultadosBusca> {
     }
 
     for (int i = 0; i < ids.length; i++) {
-      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key3}");
+      uri = Uri.parse("https://api.spoonacular.com/recipes/${ids[i]}/information?apiKey=${spoon_Key4}");
       response = await http.get(uri);
       receita = json.decode(response.body);
       receitinha = Receitas(
