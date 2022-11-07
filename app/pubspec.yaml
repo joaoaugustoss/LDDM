@@ -46,6 +46,12 @@ dependencies:
   sqflite:
   crypto: ^3.0.1
   flutter_rating_bar: ^4.0.1
+  flutter_launcher_icons: ^0.9.2
+
+flutter_icons:
+  android: launcher_icon
+  ios: true
+  image_path: /assets/images/ic_launcher.png
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
