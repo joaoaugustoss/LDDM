@@ -134,6 +134,8 @@ A tabela com suas respectivas colunas e tipos segue abaixo:
 
 Para verificar se o usuário já está logado em sua conta é utilizado o [Shared Preferences](https://pub.dev/packages/shared_preferences). Se o id do usuário estiver guardado no Shared Preferences então o usuário está logado, caso contrário não. Assim é possível controlar as telas que irão aparecer caso esteja ou não logado. 
 
+### Diagrama Relacional do Banco de Dados
+<img src="https://github.com/joaoaugustoss/LDDM/blob/main/docs/BDRelacional.png" width=600>
 
 ## :books: Dependências e libs utilizadas 
 
